@@ -18,7 +18,7 @@ const RegisterPage = () => {
     setModules([
       "Software Development Practice", "Patterns and Algorithms", "Database Management",
       "Mathematics and Statistics", "Cloud Computing", "Machine Learning",
-      "Software Quality Assurance", "Networking", "English", "Aesthetic"
+      "Software Quality Assurance", "Networking", "English", "Aesthetic","Digital Entrepreneurship"
     ]);
   }, []);
 
