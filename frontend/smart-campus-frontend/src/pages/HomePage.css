@@ -1,0 +1,101 @@
+/* src/pages/HomePage.css */
+
+/* Basic layout */
+.home-page {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fa;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+  }
+  
+  /* Welcome section */
+  .welcome-section {
+    text-align: center;
+    padding: 2rem;
+    background-color: #009688;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3rem;
+  }
+  
+  .welcome-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .welcome-section p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+  
+  .cta-button {
+    padding: 12px 30px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+  }
+  
+  .cta-button:hover {
+    opacity: 0.8;
+  }
+  
+  .login-button {
+    background-color: #00796b;
+    color: white;
+    border: 2px solid #00796b;
+  }
+  
+  .register-button {
+    background-color: #4caf50;
+    color: white;
+    border: 2px solid #4caf50;
+  }
+  
+  /* Features section */
+  .features-section {
+    text-align: center;
+    padding: 2rem;
+    width: 60%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3rem;
+  }
+  
+  .features-section h2 {
+    font-size: 2rem;
+    color: #009688;
+  }
+  
+  .features-section ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .features-section li {
+    font-size: 1.1rem;
+    margin: 1rem 0;
+  }
+  
+  /* Footer */
+  .footer {
+    font-size: 1rem;
+    color: #777;
+    text-align: center;
+    padding: 1rem;
+    width: 100%;
+    background-color: #f4f7fa;
+  }
+  

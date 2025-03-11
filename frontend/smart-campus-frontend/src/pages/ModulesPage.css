@@ -1,0 +1,153 @@
+/* 📌 Modules Container */
+.modules-container {
+  max-width: 1200px;
+  margin: 1px auto;
+  padding: 20px;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  margin-top: -50px;
+}
+
+/* 📌 Page Title */
+/* Modern Page Title Styling */
+.page-title {
+  font-size: 2.5rem; /* Increased for a bold presence */
+  font-weight: 700;
+  color: #333;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 1.5px;
+  background: linear-gradient(90deg, #33cb9b, #0ee190); /* Gradient effect */
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; /* Apply gradient text effect */
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  position: relative;
+  display: inline-block;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Underline Effect on Hover */
+.page-title::after {
+  content: "";
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #1fab7a, #0bd08b);
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  transition: width 0.3s ease-in-out;
+  border-radius: 4px;
+}
+
+/* Hover Effect */
+.page-title:hover::after {
+  width: 120%;
+}
+
+/* Responsive Title */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 2rem;
+  }
+}
+
+
+/* 📌 Modules Grid */
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+/* 📌 Module Card Styling */
+.module-card {
+  background: linear-gradient(135deg, #ebf4ef, #f8f9fc);
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 🔥 Hover Effect */
+.module-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px #0b8c61;
+}
+
+/* 📌 Module Title */
+.module-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #007bff;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 12px;
+  transition: color 0.3s ease;
+}
+
+/* 🔥 Hover Effect for Title */
+.module-title:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+
+/* 📌 Pie Chart Container */
+.chart-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* 📌 Completion Text */
+.completion-text {
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+  margin-top: 10px;
+  transition: color 0.3s ease;
+}
+
+/* 🔥 Hover Effect on Completion Text */
+.module-card:hover .completion-text {
+  color: #007bff;
+}
+
+/* 🌟 Floating Glow Effect */
+.module-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 123, 255, 0.15), transparent);
+  transition: opacity 0.4s ease-in-out;
+  opacity: 0;
+  z-index: -1;
+}
+
+.module-card:hover::before {
+  opacity: 1;
+}
+
+/* 📌 Responsive Design */
+@media screen and (max-width: 768px) {
+  .modules-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  .module-card {
+    padding: 20px;
+  }
+
+  .module-title {
+    font-size: 1.2rem;
+  }
+}

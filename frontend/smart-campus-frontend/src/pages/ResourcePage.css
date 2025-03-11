@@ -1,0 +1,90 @@
+.resource-page {
+    margin: 20px;
+    padding: 20px;
+    background-color: #f4f7fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .heading {
+    text-align: center;
+    font-size: 2em;
+    color: #4caf50;
+    margin-bottom: 20px;
+  }
+  
+  .hall-selection {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .hall-dropdown {
+    padding: 10px;
+    font-size: 1.2em;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  .seats-availability {
+    text-align: center;
+  }
+  
+  .seats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    justify-items: center;
+  }
+  
+  .seat {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
+  .available {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .booked {
+    background-color: #e74c3c;
+    color: white;
+  }
+  
+  .seat-action-button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #4caf50;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .seat-action-button:hover {
+    background-color: #45a049;
+  }
+  
+  .book-entire-hall {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .book-hall-button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    font-size: 1.2em;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .book-hall-button:hover {
+    background-color: #45a049;
+  }
+  

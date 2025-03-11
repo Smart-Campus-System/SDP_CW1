@@ -1,0 +1,12 @@
+Dear Sir/Madam,
+
+I am writing to express my enthusiasm for the Software Engineer internship position at Code Scale. As a dedicated undergraduate at Kingston University London, coupled with hands-on experience in both academia and industry, I am eager to contribute my technical expertise and collaborative spirit to your esteemed team.
+
+During my academic journey at the Institute of Technology, University of Moratuwa, and Kingston University London, I honed my skills in modern development frameworks such as React.js, Node.js, Flutter, and Spring Boot. My passion for creating efficient, user-friendly web and mobile applications aligns with the core responsibilities of the Full Stack Developer role.
+
+I also bring six months of practical experience as an Intern Web Developer at the Sri Lanka Port Authority. In this role, I actively contributed to developing robust systems using AngularJS, Spring Boot, and MySQL. This opportunity allowed me to strengthen my problem-solving abilities, collaborate with cross-functional teams, and deliver scalable solutions in a dynamic environment.
+
+I would welcome the opportunity to discuss how my skills and experiences align with your needs. Thank you for considering my application. I look forward to the possibility of contributing to your success.
+
+Sincerely,
+H.K.I. Sandeepa

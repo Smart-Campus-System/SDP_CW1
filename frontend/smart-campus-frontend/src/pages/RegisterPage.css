@@ -1,0 +1,146 @@
+/* 📌 Register Page Container */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    padding: 20px;
+  }
+  
+  /* 📌 Registration Box */
+  .register-box {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .register-box:hover {
+    transform: scale(1.02);
+  }
+  
+  /* 📌 Title */
+  .register-box h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #007bff;
+    margin-bottom: 20px;
+  }
+  
+  /* 📌 Input Fields */
+  .register-box input,
+  .register-box select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    background: #f8f9fa;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* 🔥 Focus Effect on Inputs */
+  .register-box input:focus,
+  .register-box select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+    outline: none;
+  }
+  
+  /* 📌 Modules Checkbox Styling */
+  .modules-checkbox {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  /* 📌 Checkbox Label */
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  /* 📌 Checkbox Style */
+  .checkbox-label input[type="checkbox"] {
+    accent-color: #007bff;
+    transform: scale(1.2);
+  }
+  
+  /* 📌 Checkbox Hover Effect */
+  .checkbox-label:hover {
+    background: #e3f2fd;
+  }
+  
+  /* 📌 Register Button */
+  .register-box button {
+    width: 100%;
+    padding: 12px;
+    background: #007bff;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+  }
+  
+  /* 🔥 Hover Effect on Button */
+  .register-box button:hover {
+    background: #0056b3;
+    transform: scale(1.03);
+  }
+  
+  /* 📌 Error Message */
+  .error {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  /* 📌 Responsive Design */
+  @media (max-width: 768px) {
+    .register-container {
+      padding: 15px;
+    }
+  
+    .register-box {
+      padding: 25px;
+      max-width: 100%;
+    }
+  
+    .register-box h2 {
+      font-size: 1.5rem;
+    }
+  
+    .register-box input,
+    .register-box select {
+      font-size: 14px;
+    }
+  
+    .modules-checkbox {
+      flex-direction: column;
+    }
+  
+    .checkbox-label {
+      font-size: 14px;
+      padding: 8px;
+    }
+  }
+  

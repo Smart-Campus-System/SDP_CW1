@@ -1,0 +1,126 @@
+/* Sidebar Container */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 250px;
+  background-color: #ffffff;
+  box-shadow: 2px 0 15px #4caf50;
+  padding-top: 30px;
+  transition: all 0.3s ease;
+}
+
+/* Sidebar Button Styling */
+.sidebar-button {
+  background-color: transparent;
+  border: none;
+  padding: 15px;
+  width: 100%;
+  text-align: left;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #333;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 8px;
+}
+
+/* Sidebar Button Hover Effect */
+.sidebar-button:hover {
+  background-color: #e6f7ff; /* Light Blue background on hover */
+  color: #4caf50; /* Change text color */
+}
+
+/* Icon inside buttons */
+.icon {
+  margin-right: 12px;
+  font-size: 20px;
+}
+
+/* Dropdown Menu Styling */
+.dropdown {
+  padding-left: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #f7faff;
+  border-radius: 8px;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+/* Dropdown Option Styling */
+.dropdown-option {
+  background-color: transparent;
+  border: none;
+  padding: 10px 20px;
+  width: 100%;
+  text-align: left;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 6px;
+}
+
+/* Hover Effect on Dropdown Options */
+.dropdown-option:hover {
+  background-color: #e1e7f5; /* Light blue background on hover */
+  color: #4caf50; /* Change text color */
+}
+
+/* Active State for Dropdown Option */
+.dropdown-option:active {
+  background-color: #d1e1f1; /* Darker blue for active item */
+}
+
+/* Sidebar Dropdown for Expanded State */
+.sidebar .dropdown.active {
+  background-color: #e6f7ff; /* Light background when expanded */
+  border-radius: 8px;
+}
+
+/* Mobile Responsiveness: Sidebar should collapse at smaller widths */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 220px; /* Slightly narrower sidebar */
+  }
+
+  .sidebar-button {
+    font-size: 16px; /* Smaller font size for mobile */
+    padding: 12px;
+  }
+
+  .dropdown-option {
+    font-size: 14px; /* Smaller font size for dropdown items */
+    padding: 8px 15px;
+  }
+
+  .sidebar-button:hover {
+    background-color: #f1f1f1; /* Lighter hover effect for small screens */
+  }
+
+  /* Adjust icon size for small screens */
+  .icon {
+    font-size: 18px;
+  }
+}
+
+/* For even smaller screens (like phones), hide the sidebar or use a toggle button */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 180px; /* More compact sidebar on smaller screens */
+  }
+
+  .sidebar-button {
+    font-size: 14px; /* Even smaller font size for mobile */
+    padding: 10px;
+  }
+
+  /* Make the dropdown items more compact */
+  .dropdown-option {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}
