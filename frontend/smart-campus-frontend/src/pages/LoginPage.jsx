@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import axios from '../api/axios.js';
 import { loginSuccess } from '../redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
+import './LoginPage.css';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -34,30 +35,10 @@ const LoginPage = () => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100vh',
-        backgroundColor: '#f4f7fa',
-        fontFamily: 'Arial, sans-serif',
-        padding: '20px',
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: '#ffffff',
-          padding: '30px',
-          borderRadius: '10px',
-          boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-          width: '100%',
-          maxWidth: '400px',
-        }}
-      >
-        <h2 style={{ textAlign: 'center', color: '#4caf50' }}>Login</h2>
-        {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+    <div className="login-container">
+      <div className="login-box">
+        <h2 className="login-title">Login</h2>
+        {error && <p className="error-message">{error}</p>}
         <form onSubmit={handleLogin}>
           <input
             type="email"
@@ -65,14 +46,7 @@ const LoginPage = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            style={{
-              width: '100%',
-              padding: '12px',
-              marginBottom: '15px',
-              borderRadius: '5px',
-              border: '1px solid #ddd',
-              fontSize: '16px',
-            }}
+            className="login-input"
           />
           <input
             type="password"
@@ -80,32 +54,9 @@ const LoginPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            style={{
-              width: '100%',
-              padding: '12px',
-              marginBottom: '15px',
-              borderRadius: '5px',
-              border: '1px solid #ddd',
-              fontSize: '16px',
-            }}
+            className="login-input"
           />
-          <button
-            type="submit"
-            style={{
-              width: '100%',
-              padding: '12px',
-              backgroundColor: '#4caf50',
-              color: 'white',
-              fontSize: '16px',
-              fontWeight: 'bold',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              transition: 'background-color 0.3s',
-            }}
-          >
-            Login
-          </button>
+          <button type="submit" className="login-button">Login</button>
         </form>
       </div>
     </div>

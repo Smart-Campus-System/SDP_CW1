@@ -1,0 +1,94 @@
+/* Navbar.css */
+.navbar-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 2px 20px;
+    background-color: #00796b;
+    color: white;
+    position: relative;
+    top: 0;
+    width: 98%;
+    z-index: -1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .logo-white {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    margin-left: 260px;
+  }
+
+  .nav-title {
+  font-size: 30px; /* Adjust the font size to your preference */
+  color: white; /* Set the text color to white */
+  margin-right: auto; /* Push the title to the left */
+  font-family: 'Arial', sans-serif; /* Optional: Adjust the font family */
+  margin-left: 10px;
+}
+  
+  .navbar-left-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-left: 10px;
+  }
+  
+  .navbar-button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .profile-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .profile-image {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ffffff;
+  }
+  
+  
+  .default-avatar {
+    color: white; /* Change color to match navbar */
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+  }
+  
+  
+  .notification-dropdown {
+    position: absolute;
+    top: 60px;
+    left: 20px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 200px;
+  }
+  
+  .navbar-right-section {
+    color: white;
+    margin-right: 20px;
+    font-size: 20px;
+    /* font-weight: bold; */
+    font-family: Arial;
+  }
+  
+  .campus-name {
+    font-size: 30px; /* Adjust the font size to your preference */
+    color: white; /* Set the text color to white */
+    margin-right: auto; /* Push the title to the left */
+    font-family: 'Arial', sans-serif; /* Optional: Adjust the font family */
+    margin-left: 300px;
+  }
