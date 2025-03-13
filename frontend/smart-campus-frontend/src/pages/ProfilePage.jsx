@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './ProfilePage.css'; // Import custom CSS for styling
 
 const ProfilePage = () => {
@@ -29,17 +30,29 @@ const ProfilePage = () => {
     }));
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file); // Create URL for the uploaded image
-      setProfile({ ...profile, profilePicture: imageUrl });
-
-      // Save the profile picture URL to localStorage
-      localStorage.setItem('profilePicture', imageUrl);
+      // If you want to upload the image to the backend:
+      const formData = new FormData();
+      formData.append('profilePhoto', file);
+      try {
+        const response = await axios.post(
+          'http://localhost:5000/api/users/uploadProfilePicture',
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
+        setProfile({ ...profile, profilePicture: response.data.profilePhoto });
+      } catch (error) {
+        console.error('Error uploading profile photo:', error);
+      }
     }
   };
-
 
   const handleSave = () => {
     setIsEditable(false);
@@ -81,14 +94,6 @@ const ProfilePage = () => {
             disabled={!isEditable}
             placeholder="Full Name"
           />
-          {/* <input
-            type="text"
-            name="lastName"
-            value={profile.lastName}
-            onChange={handleInputChange}
-            disabled={!isEditable}
-            placeholder="Last Name"
-          /> */}
           <input
             type="email"
             name="email"
