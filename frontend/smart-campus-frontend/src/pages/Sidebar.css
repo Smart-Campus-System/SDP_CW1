@@ -6,9 +6,13 @@
   height: 100%;
   width: 250px;
   background-color: #ffffff;
-  box-shadow: 2px 0 15px #4caf50;
+  box-shadow: 2px 0 15px #00796b;
   padding-top: 30px;
   transition: all 0.3s ease;
+}
+
+.sidebar a {
+  text-decoration: none;
 }
 
 /* Sidebar Button Styling */

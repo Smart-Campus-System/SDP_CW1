@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { FaBell, FaUserCircle, FaComments } from "react-icons/fa"; // Importing icons
 import { Link } from "react-router-dom";
+import './Navbar.css'; // Importing the CSS file
+import DefaultAvatar from "../assets/avatar.png";
+import LogoWhite from "../assets/LogoWhite.png";
+
 
 const Navbar = () => {
   const [notificationOpen, setNotificationOpen] = useState(false);
@@ -24,8 +28,8 @@ const Navbar = () => {
         display: "flex",
         justifyContent: "flex-end", // Align items to the left
         alignItems: "center",
-        padding: "15px 20px",
-        backgroundColor: "#4caf50",
+        padding: "2px 20px",
+        backgroundColor: "#00796b",
         color: "white",
         position: "",
         top: 0,
@@ -34,6 +38,10 @@ const Navbar = () => {
         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
       }}
     >
+      <img src={LogoWhite} alt="Campus Logo" className="logo-white" />
+
+              <h1 className="nav-title">Smart Campus</h1>
+
       {/* Left Section: Profile, Chat, and Notifications */}
       <div
         style={{
@@ -89,33 +97,15 @@ const Navbar = () => {
 
         {/* Profile Button */}
         <Link to="/profile">
-          <button
-            style={{
-              backgroundColor: "transparent",
-              border: "none",
-              color: "white",
-              cursor: "pointer",
-              transition: "color 0.3s ease",
-            }}
-          >
-            {/* If profile picture exists, display it, otherwise show default icon */}
-            <img
-              src={profilePicture || "https://via.placeholder.com/50"}
-              alt="Profile"
-              style={{
-                width: "35px",
-                height: "35px",
-                borderRadius: "50%",
-                objectFit: "cover",
-                border: "2px solid #ffffff",
-              }}
-            />
-          </button>
-        </Link>
+      <button className="profile-button">
+      {/* <img src="/avatar.png" alt="Profile" className="profile-image" /> */}
+        <img src={profilePicture || DefaultAvatar} alt="Profile" className="profile-image" />
+      </button>
+    </Link>
       </div>
 
       {/* Right Section: Display User Name */}
-      <div style={{ color: "white", marginRight: "20px", fontSize: "20px", fontWeight: "bold" }}>
+      <div style={{ color: "white", marginRight: "20px", fontSize: "20px", fontWeight: "bold", fontFamily: "Arial" }}>
         Welcome, {localStorage.getItem("userName")}!
       </div>
     </div>

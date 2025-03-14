@@ -1,36 +1,32 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './HomePage.css'; 
+import './HomePage.css';
+import campusLogo from '../assets/campus-logo.png'; // Add your logo in the assets folder
+import educationVideo from '../assets/education-video.mp4'; // Add your video in the assets folder
 
 const HomePage = () => {
   return (
     <div className="home-page">
-      <div className="welcome-section">
-        <h1>Welcome to the Smart Campus!</h1>
-        <p>Manage your academic and campus life with ease.</p>
-        <div className="cta-buttons">
-          <Link to="/login" className="cta-button login-button">
-            Login
-          </Link>
-        </div>
+      <div className="video-section">
+        <video autoPlay loop muted className="education-video">
+          <source src={educationVideo} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       </div>
 
-      <div className="features-section">
-        <h2>Features</h2>
-        <ul>
-          <li>Schedule your classes and events.</li>
-          <li>Communicate with students and staff.</li>
-          <li>Reserve campus facilities easily.</li>
-          <li>Stay updated with real-time announcements.</li>
-        </ul>
+      <div className="content-section">
+        <img src={campusLogo} alt="Campus Logo" className="campus-logo" />
+        <h1 className="smart-campus">Smart Campus</h1>
+        <p className="description">
+          <b>Manage your academic and campus life with ease.</b><br/>
+          Stay connected | schedule your classes | and access campus resources effortlessly
+        </p>
+        <Link to="/login" className="cta-button">
+          Login
+        </Link>
       </div>
-
-      <footer className="footer">
-        <p>&copy; 2025 Smart Campus Management</p>
-      </footer>
     </div>
   );
 };
 
 export default HomePage;
-
