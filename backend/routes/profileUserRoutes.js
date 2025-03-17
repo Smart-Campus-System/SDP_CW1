@@ -143,4 +143,59 @@ router.post('/uploadPhoto', authMiddleware, async (req, res) => {
   }
 });
 
+router.put('/changePassword', authMiddleware, async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+
+  // Log incoming request data
+  console.log("Received data:", req.body);
+
+  // Validate that both old and new passwords are provided
+  if (!oldPassword || !newPassword) {
+    console.log("Old or new password missing");
+    return res.status(400).json({ msg: "Old and new passwords are required" });
+  }
+
+  try {
+    // Find user by decoded ID from the JWT token
+    console.log("Looking up user with ID:", req.user.id);
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      console.log("User not found with ID:", req.user.id);
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // Log user object to ensure password is hashed correctly
+    console.log("User found:", user);
+
+    // Check if old password matches the stored hash
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    console.log("Password match result:", isMatch);
+
+    if (!isMatch) {
+      console.log("Old password is incorrect");
+      return res.status(400).json({ msg: "Old password is incorrect" });
+    }
+
+    // If old password matches, proceed to hash the new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    console.log("New password hashed:", hashedPassword);
+
+    // Update user password with the new hashed password
+    user.password = hashedPassword;
+    await user.save();
+
+    // Log success message
+    console.log("Password updated successfully for user:", user._id);
+
+    res.status(200).json({ msg: "Password changed successfully" });
+  } catch (error) {
+    // Log any errors that occur during the process
+    console.error("Error during password change:", error);
+    res.status(500).json({ msg: "Server error", error: error.message });
+  }
+});
+
+
+
 export default router;

@@ -12,10 +12,6 @@ const router = express.Router();
 // 🔹 Create an Event (Admin/Lecturer Only)
 router.post("/", authMiddleware, async (req, res) => {
     try {
-      if (req.user.role !== "admin" && req.user.role !== "lecturer") {
-        return res.status(403).json({ msg: "Only Admins or Lecturers can create events" });
-      }
-  
       const { title, description, date, time, location } = req.body;
   
       const event = new Event({

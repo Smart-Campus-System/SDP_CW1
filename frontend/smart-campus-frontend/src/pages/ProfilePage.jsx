@@ -17,9 +17,14 @@ const ProfilePage = () => {
   const [isEditable, setIsEditable] = useState(true);
   const [isSaved, setIsSaved] = useState(false);
 
+  // New state for password change
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
+
   useEffect(() => {
     // Optionally, you can fetch user data from the backend if you need to
-    // and update the profile state with that data
   }, []);
 
   const handleInputChange = (e) => {
@@ -33,7 +38,6 @@ const ProfilePage = () => {
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      // If you want to upload the image to the backend:
       const formData = new FormData();
       formData.append('profilePhoto', file);
       try {
@@ -59,6 +63,40 @@ const ProfilePage = () => {
     setIsSaved(true);
   };
 
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();  // Prevent default form submission
+  
+    // Ensure both old and new passwords are filled in
+    if (!oldPassword || !newPassword) {
+      setPasswordError("Please fill out both fields.");
+      return;
+    }
+  
+    try {
+      // Make the API call to change the password
+      const response = await fetch('/api/users/changePassword', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({ oldPassword, newPassword }),
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        // Handle success, maybe show a success message
+        alert("Password updated successfully!");
+      } else {
+        // Handle error, show error message
+        setPasswordError(data.msg || "Something went wrong.");
+      }
+    } catch (error) {
+      console.error("Error updating password:", error);
+      setPasswordError("Error updating password. Please try again.");
+    }
+  };
+  
   // Handle account deletion
   const handleDelete = async () => {
     localStorage.removeItem('token');
@@ -121,6 +159,36 @@ const ProfilePage = () => {
           <button className="sign-out-btn" onClick={handleSignOut}>
             Sign Out
           </button>
+
+          {/* Change Password Button */}
+          <button className="change-password-btn" onClick={() => setIsChangingPassword(true)}>
+            Change Password
+          </button>
+
+          {/* Password Change Form */}
+          <form onSubmit={handlePasswordChange}>
+            {isChangingPassword && (
+              <div className="password-change-form">
+                <input
+                  type="password"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                  placeholder="Old Password"
+                  required
+                />
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="New Password"
+                  required
+                />
+                <button type="submit" >Update Password</button>
+                {passwordError && <p className="error">{passwordError}</p>}
+              </div>
+            )}
+          </form>
+
         </div>
       </div>
     </div>
