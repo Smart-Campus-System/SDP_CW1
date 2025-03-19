@@ -2,8 +2,30 @@ import express from "express";
 import User from "../models/User.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import adminMiddleware from "../middleware/adminMiddleware.js";
+import Module from "../models/Module.js"; // Ensure this line is present
 
 const router = express.Router();
+
+// Endpoint to get total students, lecturers, and all users
+router.get('/dashboard/stats', authMiddleware, async (req, res) => {
+  try {
+    const totalStudents = await User.countDocuments({ role: 'student' });
+    const totalLecturers = await User.countDocuments({ role: 'lecturer' });
+    const totalUsers = await User.countDocuments();
+    const enrolledModules = await Module.countDocuments();  // Assuming modules are stored in the Module collection
+
+    res.status(200).json({
+      totalStudents,
+      totalLecturers,
+      totalUsers,
+      enrolledModules,
+    });
+  } catch (error) {
+    console.error("Error fetching dashboard data:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
 
 // 🔹 Fetch User Details (Protected Route)
 router.get("/:id", authMiddleware, async (req, res) => {

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { FaCalendar, FaTasks, FaCog, FaBook, FaChartPie } from 'react-icons/fa'; // Calendar, Scheduler, Modules icons
+import { FaCalendar, FaTasks, FaCog, FaBook } from 'react-icons/fa'; // Calendar, Scheduler, Modules icons
 import { Link } from 'react-router-dom';
 import './Sidebar.css'; // Import external CSS file
 
 const Sidebar = () => {
   const [schedulerOpen, setSchedulerOpen] = useState(false);
   const [modulesOpen, setModulesOpen] = useState(false);
+
+  // Get the user role from localStorage
+  const userRole = localStorage.getItem('role'); // Assuming you store the role during login
 
   // Toggles for opening and closing dropdowns
   const toggleScheduler = () => setSchedulerOpen(!schedulerOpen);
@@ -42,23 +45,40 @@ const Sidebar = () => {
       {/* Available Options Dropdown */}
       {schedulerOpen && (
         <div className="dropdown">
-          <Link to="/scheduler">
-            <button className="dropdown-option" onClick={closeSchedulerDropdown}>Lecture</button>
-          </Link>
-          <Link to="/scheduler">
-            <button className="dropdown-option" onClick={closeSchedulerDropdown}>Guest Lecture</button>
-          </Link>
-          <Link to="/scheduler">
-            <button className="dropdown-option" onClick={closeSchedulerDropdown}>Workshop</button>
-          </Link>
-          <Link to="/scheduler">
-            <button className="dropdown-option" onClick={closeSchedulerDropdown}>Seminar</button>
-          </Link>
-          <Link to="/scheduler">
-            <button className="dropdown-option" onClick={closeSchedulerDropdown}>Revision</button>
-          </Link>
+          {userRole !== 'student' && (
+            <>
+              <Link to="/scheduler">
+                <button className="dropdown-option" onClick={closeSchedulerDropdown}>
+                  Lecture
+                </button>
+              </Link>
+              <Link to="/scheduler">
+                <button className="dropdown-option" onClick={closeSchedulerDropdown}>
+                  Guest Lecture
+                </button>
+              </Link>
+              <Link to="/scheduler">
+                <button className="dropdown-option" onClick={closeSchedulerDropdown}>
+                  Workshop
+                </button>
+              </Link>
+              <Link to="/scheduler">
+                <button className="dropdown-option" onClick={closeSchedulerDropdown}>
+                  Seminar
+                </button>
+              </Link>
+              <Link to="/scheduler">
+                <button className="dropdown-option" onClick={closeSchedulerDropdown}>
+                  Revision
+                </button>
+              </Link>
+            </>
+          )}
+          {/* Always show Event for all users */}
           <Link to="/event">
-            <button className="dropdown-option" onClick={closeSchedulerDropdown}>Event</button>
+            <button className="dropdown-option" onClick={closeSchedulerDropdown}>
+              Event
+            </button>
           </Link>
         </div>
       )}

@@ -7,17 +7,24 @@ const ResourcePage = () => {
   const [availableSeats, setAvailableSeats] = useState([]);
   const [selectedHall, setSelectedHall] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [halls, setHalls] = useState([]); // State to store hall IDs
+  const [halls, setHalls] = useState([]); // State to store hall names
 
-  // Fetch hall IDs from the backend
+  // Fetch hall names from the backend
   const fetchHalls = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/resources/halls", {
+      const response = await axios.get("http://localhost:5000/api/resources/hallNames", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setHalls(response.data.hallIds); // Update halls with the hall IDs
+
+      // Check if response.data.hallNames exists and is an array
+      if (Array.isArray(response.data.hallNames)) {
+        setHalls(response.data.hallNames); // Set hall names directly
+      } else {
+        console.error("Expected hallNames array but got:", response.data);
+        setHalls([]); // If response format is incorrect, reset to an empty array
+      }
     } catch (error) {
       console.error("Error fetching halls:", error);
       setHalls([]); // Ensure halls is an array even if fetching fails
@@ -25,22 +32,22 @@ const ResourcePage = () => {
   };
 
   useEffect(() => {
-    fetchHalls(); // Fetch hall IDs when the component mounts
+    fetchHalls(); // Fetch hall names when the component mounts
   }, []);
 
   // Fetch available seats for a selected hall
-  const fetchAvailability = async (hallId) => {
+  const fetchAvailability = async (hallName) => {
     try {
       if (!token) {
         console.error("Token is missing or invalid.");
         return;
       }
 
-      console.log("Fetching availability for hallId:", hallId); // Debugging log
+      console.log("Fetching availability for hall:", hallName); // Debugging log
 
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:5000/api/resources/availability/${hallId}`,
+        `http://localhost:5000/api/resources/availability/${hallName}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -48,66 +55,72 @@ const ResourcePage = () => {
         }
       );
       console.log("Availability response:", response.data); // Debugging log
-      setAvailableSeats(response.data.availableSeats); // Set the available seats
+
+      // Set all seats, including booked ones
+      setAvailableSeats(response.data.seats);  // Assuming backend returns all seats with status (booked or available)
       setLoading(false);
     } catch (error) {
       console.error("Error fetching availability:", error);
-      console.error("Error details:", error.response ? error.response.data : error.message);
       setLoading(false);
     }
   };
 
+
+
   // Book a seat
-  const bookSeat = async (hallId, seatNumber) => {
+  const bookSeat = async (hallName, seatNumber) => {
     try {
-      console.log("Booking seat:", { hallId, seatNumber }); // Debugging log
+      console.log("Booking seat:", { hallName, seatNumber }); // Debugging log
       await axios.post(
         "http://localhost:5000/api/resources/book",
-        { hallId, seatNumber },
+        { hallName, seatNumber },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       alert("Seat booked successfully!");
-      fetchAvailability(hallId); // Refresh availability
+      fetchAvailability(hallName); // Refresh availability and seat status by passing hallName
     } catch (error) {
       console.error("Error booking seat:", error); // Debugging log
       alert("Failed to book seat.");
     }
   };
 
+
+
   // Cancel seat reservation
-  const cancelSeat = async (hallId, seatNumber) => {
+  const cancelSeat = async (hallName, seatNumber) => {
     try {
-      console.log("Canceling seat:", { hallId, seatNumber }); // Debugging log
+      console.log("Canceling seat:", { hallName, seatNumber }); // Debugging log
       await axios.post(
         "http://localhost:5000/api/resources/cancel",
-        { hallId, seatNumber },
+        { hallName, seatNumber },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       alert("Booking canceled successfully!");
-      fetchAvailability(hallId); // Refresh availability
+      fetchAvailability(hallName); // Refresh availability and seat status
     } catch (error) {
       console.error("Error canceling seat:", error); // Debugging log
       alert("Failed to cancel booking.");
     }
   };
 
+
   // Book entire hall (admin/lecturer only)
-  const bookEntireHall = async (hallId) => {
+  const bookEntireHall = async (hallName) => {
     try {
-      console.log("Booking entire hall:", { hallId }); // Debugging log
+      console.log("Booking entire hall:", { hallName }); // Debugging log
       await axios.post(
         "http://localhost:5000/api/resources/bookHall",
-        { hallId },
+        { hallName },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       alert("Hall booked successfully!");
-      fetchAvailability(hallId); // Refresh availability
+      fetchAvailability(hallName); // Refresh availability
     } catch (error) {
       console.error("Error booking hall:", error); // Debugging log
       alert("Failed to book the hall.");
@@ -115,9 +128,9 @@ const ResourcePage = () => {
   };
 
   // Handle hall selection
-  const handleHallSelect = (hallId) => {
-    setSelectedHall(hallId);
-    fetchAvailability(hallId); // Fetch available seats for selected hall
+  const handleHallSelect = (hallName) => {
+    setSelectedHall(hallName);
+    fetchAvailability(hallName); // Fetch available seats for selected hall
   };
 
   return (
@@ -131,9 +144,9 @@ const ResourcePage = () => {
           className="hall-dropdown"
         >
           <option value="">Select a Hall</option>
-          {halls && halls.map((hallId) => (
-            <option key={hallId} value={hallId}>
-              {`Hall ${hallId}`} {/* Display the hall number or name */}
+          {halls && halls.map((hallName, index) => (
+            <option key={index} value={hallName}>
+              {hallName} {/* Display hall name */}
             </option>
           ))}
         </select>
@@ -142,7 +155,7 @@ const ResourcePage = () => {
       {/* Display Available Seats */}
       {selectedHall && (
         <div className="seats-availability">
-          <h3>Available Seats in Hall {selectedHall}</h3>
+          <h3>Available Seats in {selectedHall}</h3>
           {loading ? (
             <p>Loading availability...</p>
           ) : (
@@ -152,6 +165,9 @@ const ResourcePage = () => {
                   <div
                     key={seat.seatNumber}
                     className={`seat ${seat.isBooked ? "booked" : "available"}`}
+                    style={{
+                      backgroundColor: seat.isBooked ? '#b1f0b7' : '#4caf50', // Red for booked, green for available
+                    }}
                   >
                     <span>Seat {seat.seatNumber}</span>
                     {!seat.isBooked ? (
@@ -178,6 +194,9 @@ const ResourcePage = () => {
           )}
         </div>
       )}
+
+
+
 
       {/* Option for lecturers/admins to book the entire hall */}
       {["lecturer", "admin"].includes(localStorage.getItem("role")) && (
