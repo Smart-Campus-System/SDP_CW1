@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import axios from 'axios'; // Axios for API requests
-import { useNavigate } from 'react-router-dom'; // Redirect to other pages after successful event creation
+import React, { useState, useEffect } from "react";
+import axios from "axios"; // Axios for API requests
+import { useNavigate } from "react-router-dom"; // Redirect to other pages after successful event creation
 
 const EventPage = () => {
   const [title, setTitle] = useState('');
@@ -8,15 +8,37 @@ const EventPage = () => {
   const [dateTime, setDateTime] = useState('');
   const [location, setLocation] = useState('');
   const [error, setError] = useState('');
+  const [locations, setLocations] = useState([]);  // State to store locations
   const navigate = useNavigate(); // To navigate to other pages
+
+  // Fetch available locations from the backend
+  const fetchLocations = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get("http://localhost:5000/api/resources/locations", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setLocations(response.data.locations);  // Set locations in state
+    } catch (error) {
+      console.error("Error fetching locations:", error);
+      setError("Failed to load locations.");
+    }
+  };
+
+  useEffect(() => {
+    fetchLocations(); // Fetch locations when the component mounts
+  }, []);
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Ensure dateTime is selected
-    if (!dateTime) {
-      setError('Please select a date and time.');
+    // Ensure dateTime and location are selected
+    if (!dateTime || !location) {
+      setError('Please select a date, time, and location.');
       return;
     }
   
@@ -28,7 +50,7 @@ const EventPage = () => {
     try {
       const eventData = { title, description, date, time, location }; // Send date & time separately
   
-      const response = await axios.post('http://localhost:5000/api/events', eventData, {
+      const response = await axios.post('http://localhost:5000/api/events/', eventData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`, // Ensure the user is authenticated
@@ -44,8 +66,6 @@ const EventPage = () => {
       console.error(err);
     }
   };
-  
-  
 
   return (
     <div className="event-page-container">
@@ -90,14 +110,19 @@ const EventPage = () => {
 
         <div className="form-group">
           <label htmlFor="location">Event Location</label>
-          <input
-            type="text"
+          <select
             id="location"
-            placeholder="Enter event location"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             required
-          />
+          >
+            <option value="">Select Event Location</option>
+            {locations.map((location, index) => (
+              <option key={index} value={location}>
+                {location} {/* Display hall name */}
+              </option>
+            ))}
+          </select>
         </div>
 
         <button type="submit" className="submit-btn">Create Event</button>

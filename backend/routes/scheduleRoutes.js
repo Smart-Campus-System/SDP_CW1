@@ -32,6 +32,25 @@ router.post("/", authMiddleware, async (req, res) => {
   }
 });
 
+// 🔹 Get All Schedules (Admin Only or Public Access)
+router.get("/", authMiddleware, async (req, res) => {
+  try {
+    // If the user is an admin, return all schedules
+    if (req.user.role === "admin") {
+      const schedules = await Schedule.find().populate("createdBy", "name email").populate("participants", "name email");
+      return res.json(schedules);
+    }
+    // If the user is a regular user, return only their schedules
+    const schedules = await Schedule.find({
+      $or: [{ createdBy: req.user.id }, { participants: req.user.id }],
+    }).populate("createdBy", "name email").populate("participants", "name email");
+
+    res.json(schedules);
+  } catch (error) {
+    res.status(500).json({ msg: "Server error", error });
+  }
+});
+
 // 🔹 Get Schedule for a User
 router.get("/:userId", authMiddleware, async (req, res) => {
   try {

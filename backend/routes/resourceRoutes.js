@@ -5,31 +5,41 @@ import NotificationService from "../utils/notificationService.js"; // ✅ Import
 
 const router = express.Router();
 
+// GET /api/resources/hallNames - Fetch all hall names from the halls array
+router.get("/hallNames", authMiddleware, async (req, res) => {
+  try {
+    // Fetch all resources and their halls
+    const resources = await Resource.find({}, "halls.hallName"); // Fetch only hallName from halls array
+
+    // Extract all hall names from the halls array
+    const hallNames = resources.flatMap(resource => resource.halls.map(hall => hall.hallName));
+
+    // Return hall names as response
+    res.json({ hallNames });
+  } catch (error) {
+    console.error("Error fetching halls:", error);
+    res.status(500).json({ msg: "Server error", error });
+  }
+});
+
 // ✅ Get One Seat by Seat Number and Hall ID
 router.get("/seat/:hallId/:seatNumber", authMiddleware, async (req, res) => {
   try {
-      const { hallId, seatNumber } = req.params;  // Get hallId and seatNumber from request parameters
+    const { hallId, seatNumber } = req.params;
 
-      // Fetch the resource and find the specific hall by hallId
-      const resource = await Resource.findOne();
-      if (!resource) return res.status(404).json({ message: "Resource not found" });
+    const resource = await Resource.findOne();
+    if (!resource) return res.status(404).json({ message: "Resource not found" });
 
-      // Find the hall by hallId
-      const hall = resource.halls.id(hallId);  // Find the hall by its ObjectId
-      if (!hall) return res.status(404).json({ message: "Hall not found" });
+    const hall = resource.halls.id(hallId);  // Find the hall by its ObjectId
+    if (!hall) return res.status(404).json({ message: "Hall not found" });
 
-      // Find the seat by seatNumber inside the hall
-      const seat = hall.seats.find(seat => seat.seatNumber === parseInt(seatNumber));  // Find seat by seatNumber
+    const seat = hall.seats.find(seat => seat.seatNumber === parseInt(seatNumber));
+    if (!seat) return res.status(404).json({ message: "Seat not found" });
 
-      if (!seat) {
-          return res.status(404).json({ message: "Seat not found" });  // Seat not found
-      }
-
-      // Respond with seat data
-      res.status(200).json({ seat });
+    res.status(200).json({ seat });
   } catch (error) {
-      console.error("Error fetching seat:", error);
-      res.status(500).json({ message: "Server Error", error });
+    console.error("Error fetching seat:", error);
+    res.status(500).json({ message: "Server Error", error });
   }
 });
 
@@ -52,112 +62,132 @@ router.get("/halls", authMiddleware, async (req, res) => {
 });
 
 
-
-// Get Available Seats for a Hall
-router.get("/availability/:hallId", authMiddleware, async (req, res) => {
+// Fetch available seats for a hall
+router.get("/availability/:hallName", authMiddleware, async (req, res) => {
   try {
-      const resource = await Resource.findOne();
-      const hall = resource.halls.id(req.params.hallId);
+    const hallName = req.params.hallName;
 
-      if (!hall) return res.status(404).json({ message: "Hall not found" });
+    // Fetch the hall with its seat information
+    const resource = await Resource.findOne({ "halls.hallName": hallName });
 
-      const availableSeats = hall.seats.filter(seat => !seat.isBooked);
-      res.json({ availableSeats, totalSeats: hall.seats.length });
+    if (!resource) {
+      return res.status(404).json({ message: "Hall not found" });
+    }
+
+    const hall = resource.halls.find((h) => h.hallName === hallName);
+
+    // Respond with all seats including their booking status
+    res.status(200).json({ seats: hall.seats });
   } catch (error) {
-      res.status(500).json({ message: "Server Error", error });
+    res.status(500).json({ message: "Server error", error });
   }
 });
 
-// ✅ Book a Seat (Students)
+
+// ✅ Book a Seat (Students) by Hall Name
 router.post("/book", authMiddleware, async (req, res) => {
   try {
-      const { hallId, seatNumber } = req.body;  // Get hallId and seatNumber from the request body
-      const userId = req.user._id;  // Get the logged-in user's ID
+    const { hallName, seatNumber } = req.body;  // Get hallName and seatNumber from the request body
+    const userId = req.user._id;  // Get the logged-in user's ID
 
-      // Fetch the resource (contains halls and seats)
-      const resource = await Resource.findOne();
-      if (!resource) {
-          return res.status(404).json({ message: "Resource not found" });  // Resource not found
-      }
+    // Fetch the resource (contains halls and seats)
+    const resource = await Resource.findOne();
+    if (!resource) {
+      return res.status(404).json({ message: "Resource not found" });  // Resource not found
+    }
 
-      // Find the specific hall by hallId
-      const hall = resource.halls.id(hallId);  // Using MongoDB's `id()` method to find the hall
-      if (!hall) {
-          return res.status(404).json({ message: "Hall not found" });  // Hall not found
-      }
+    // Find the specific hall by hallName
+    const hall = resource.halls.find(hall => hall.hallName === hallName);  // Find the hall by its name
+    if (!hall) {
+      return res.status(404).json({ message: "Hall not found" });  // Hall not found
+    }
 
-      // Find the seat in the selected hall by seatNumber
-      const seat = hall.seats.find(seat => seat.seatNumber === seatNumber);
-      if (!seat) {
-          return res.status(404).json({ message: "Seat not found" });  // Seat not found
-      }
+    // Find the seat in the selected hall by seatNumber
+    const seat = hall.seats.find(seat => seat.seatNumber === seatNumber);  // Find seat by seatNumber
+    if (!seat) {
+      return res.status(404).json({ message: "Seat not found" });  // Seat not found
+    }
 
-      // Check if the seat is already booked
-      if (seat.isBooked) {
-          return res.status(400).json({ message: "Seat already booked" });  // Seat already booked
-      }
+    // Check if the seat is already booked
+    if (seat.isBooked) {
+      return res.status(400).json({ message: "Seat already booked" });  // Seat already booked
+    }
 
-      // ✅ Book the seat
-      seat.isBooked = true;
-      seat.bookedBy = userId;   // Booked by the logged-in user
-      seat.bookedAt = new Date();  // Set the booking time
-      await resource.save();  // Save the updated resource with the booked seat
+    // ✅ Book the seat
+    seat.isBooked = true;
+    seat.bookedBy = userId;   // Booked by the logged-in user
+    seat.bookedAt = new Date();  // Set the booking time
+    await resource.save();  // Save the updated resource with the booked seat
 
-      // ✅ Send notification to student
-      NotificationService.sendNotification(userId, `Your seat ${seatNumber} in ${hall.hallName} is booked.`);
+    // ✅ Send notification to student
+    NotificationService.sendNotification(userId, `Your seat ${seatNumber} in ${hall.hallName} is booked.`);
 
-      res.status(200).json({ message: `Seat ${seatNumber} in ${hall.hallName} booked successfully!` });
+    res.status(200).json({ message: `Seat ${seatNumber} in ${hall.hallName} booked successfully!` });
   } catch (error) {
-      console.error("Booking Error:", error);
-      res.status(500).json({ message: "Server Error", error });
+    console.error("Booking Error:", error);
+    res.status(500).json({ message: "Server Error", error });
   }
 });
-
 
 
 // ✅ Cancel Seat Reservation (Students)
 router.post("/cancel", authMiddleware, async (req, res) => {
   try {
-    const { hallId, seatNumber } = req.body;
-    const userId = req.user._id;
+    const { hallName, seatNumber } = req.body;
+    const userId = req.user._id; // Get the logged-in user's ID
 
     const resource = await Resource.findOne();
-    const hall = resource.halls.id(hallId);
-    if (!hall) return res.status(404).json({ message: "Hall not found" });
-
-    const seat = hall.seats.find(seat => seat.seatNumber === seatNumber);
-    if (!seat || !seat.isBooked || seat.bookedBy.toString() !== userId.toString()) {
-      return res.status(400).json({ message: "Cannot cancel this seat" });
+    if (!resource) {
+      return res.status(404).json({ message: "Resource not found" }); // Resource not found
     }
 
-    // ✅ Cancel seat reservation
-    seat.isBooked = false;
-    seat.bookedBy = null;
-    seat.bookedAt = null;
-    await resource.save();
+    // Find the hall by its name
+    const hall = resource.halls.find(hall => hall.hallName === hallName); // Find hall by name
+    if (!hall) {
+      return res.status(404).json({ message: "Hall not found" }); // Hall not found
+    }
 
-    // ✅ Send notification to student
-    NotificationService.sendNotification(userId, `Your booking for seat ${seatNumber} in ${hall.hallName} has been canceled.`);
+    // Find the seat in the selected hall by seatNumber
+    const seat = hall.seats.find(seat => seat.seatNumber === seatNumber); // Find seat by number
+    if (!seat) {
+      return res.status(404).json({ message: "Seat not found" }); // Seat not found
+    }
 
-    res.status(200).json({ message: `Seat ${seatNumber} canceled successfully!` });
+    // Check if the seat is booked and if the user is the one who booked it
+    if (!seat.isBooked || (seat.bookedBy && seat.bookedBy.toString() !== userId.toString())) {
+      return res.status(400).json({ message: "Cannot cancel this seat" }); // Seat not booked or not owned by user
+    }
+
+    // Cancel seat reservation
+    seat.isBooked = false; // Mark as available
+    seat.bookedBy = null; // Remove booking user
+    seat.bookedAt = null; // Clear booking time
+    await resource.save(); // Save changes to the database
+
+    res.status(200).json({ message: `Seat ${seatNumber} in ${hall.hallName} canceled successfully!` });
   } catch (error) {
-    console.error("Cancel Booking Error:", error);
-    res.status(500).json({ message: "Server Error", error });
+    console.error("Cancel Booking Error:", error); // Log the entire error object
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 });
 
-// ✅ Book Entire Hall (Lecturer/Admin only)
+
+// ✅ Book Entire Hall by Hall Name (Lecturer/Admin only)
 router.post("/bookHall", authMiddleware, async (req, res) => {
   try {
+    // Ensure the user is a lecturer or admin
     if (req.user.role !== "admin" && req.user.role !== "lecturer") {
       return res.status(403).json({ message: "Unauthorized: Only lecturers or admins can book entire halls." });
     }
 
-    const { hallId } = req.body;
+    const { hallName } = req.body;  // Get hall name from the request body
 
-    // Find the resource and the specific hall
+    // Find the resource and the specific hall by hall name
     const resource = await Resource.findOne();
-    const hall = resource.halls.id(hallId);
+    if (!resource) return res.status(404).json({ message: "Resource not found" });
+
+    // Find the hall by its name
+    const hall = resource.halls.find(hall => hall.hallName === hallName);
     if (!hall) return res.status(404).json({ message: "Hall not found" });
 
     // ✅ Book all seats in the hall
@@ -170,18 +200,32 @@ router.post("/bookHall", authMiddleware, async (req, res) => {
     });
 
     await resource.save();
-
-    // ✅ Send notification to all students
-    // NotificationService.sendNotificationToAll(
-    //   "A hall has been booked by a lecturer or admin. Check your bookings."
-    // );
-
-    res.status(200).json({ message: "Hall booked successfully!" });
+    res.status(200).json({ message: `Hall ${hallName} booked successfully!` });
   } catch (error) {
     console.error("Hall Booking Error:", error);
     res.status(500).json({ message: "Server Error", error });
   }
 });
+
+// GET /api/resources/locations - Fetch all hall names from the resources collection
+router.get('/locations', authMiddleware, async (req, res) => {
+  try {
+    const resource = await Resource.findOne();
+    if (!resource) {
+      return res.status(404).json({ message: 'Resource not found' });
+    }
+
+    // Extract hall names from the resource data
+    const locations = resource.halls.map(hall => hall.hallName);
+
+    res.status(200).json({ locations });
+  } catch (error) {
+    console.error("Error fetching locations:", error);
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+
+
 
 
 export default router;
