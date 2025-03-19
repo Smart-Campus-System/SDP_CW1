@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios"; // Axios for API requests
+import { useNavigate } from "react-router-dom"; // Redirect to other pages after successful event creation
 import './SchedulerPage.css';
 
 const SchedulerPage = () => {
@@ -10,8 +10,31 @@ const SchedulerPage = () => {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [location, setLocation] = useState('');
+  const [locations, setLocations] = useState([]); // To store the available locations (from the backend)
   const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // To navigate to other pages
+
+  // Fetch locations from the backend (available halls/locations)
+  const fetchLocations = async () => {
+    const token = localStorage.getItem('token'); // Get the auth token
+
+    try {
+      const response = await axios.get('http://localhost:5000/api/resources/locations', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      
+      setLocations(response.data.locations); // Set the locations in state
+    } catch (err) {
+      console.error("Error fetching locations:", err);
+      setError("Failed to fetch locations.");
+    }
+  };
+
+  useEffect(() => {
+    fetchLocations(); // Fetch locations when the component mounts
+  }, []);
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -26,12 +49,12 @@ const SchedulerPage = () => {
     const token = localStorage.getItem('token'); // Retrieve auth token
 
     try {
-      const eventData = { title, description, date, startTime, endTime, location };
+      const eventData = { title, description, date, startTime, endTime, location }; // Send date & time separately
 
-      const response = await axios.post('http://localhost:5000/api/schedules', eventData, {
+      const response = await axios.post('http://localhost:5000/api/schedules/', eventData, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`, // Ensure the user is authenticated
         },
       });
 
@@ -109,15 +132,24 @@ const SchedulerPage = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="location">Location</label>
-          <input
-            type="text"
+          <label htmlFor="location">Event Location</label>
+          <select
             id="location"
-            placeholder="Enter location"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             required
-          />
+          >
+            <option value="">Select location</option>
+            {locations.length > 0 ? (
+              locations.map((loc, index) => (
+                <option key={index} value={loc}>
+                  {loc}
+                </option>
+              ))
+            ) : (
+              <option disabled>No locations available</option>
+            )}
+          </select>
         </div>
 
         <button type="submit" className="submit-btn">Schedule Lecture</button>

@@ -8,7 +8,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 const initializeResources = async () => {
     try {
         const halls = [];
-        for (let i = 1; i <= 5; i++) {
+        for (let i = 1; i <=10; i++) {
             const seats = [];
             for (let j = 1; j <= 25; j++) {
                 seats.push({ seatNumber: j });
