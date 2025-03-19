@@ -22,6 +22,15 @@ const Navbar = () => {
     setNotificationOpen(!notificationOpen);
   };
 
+  // Sample notifications
+  const notifications = [
+    { module: "Software Engineering", date: "March 20, 2025", time: "10:00 AM", hall: "Lecture Hall 01" },
+    { module: "Database Management", date: "March 21, 2025", time: "2:00 PM", hall: "Lecture Hall 03" },
+    { module: "AI & Machine Learning", date: "March 22, 2025", time: "9:00 AM", hall: "Lecture Hall 02" }
+  ];
+
+  
+
   return (
     <div
       style={{
@@ -65,35 +74,56 @@ const Navbar = () => {
           <FaComments size={24} />
         </button>
 
-        {/* Notification Dropdown Button */}
-        <button
-          onClick={toggleNotifications}
+        <div style={{ position: "relative", display: "inline-block" }}>
+      {/* Notification Bell Button */}
+      <button
+        onClick={toggleNotifications}
+        style={{
+          backgroundColor: "transparent",
+          border: "none",
+          color: "white",
+          cursor: "pointer",
+          transition: "color 0.3s ease",
+        }}
+      >
+        <FaBell size={24} />
+      </button>
+
+      {/* Notification Dropdown */}
+      {notificationOpen && (
+        <div
           style={{
-            backgroundColor: "transparent",
-            border: "none",
-            color: "white",
-            cursor: "pointer",
-            transition: "color 0.3s ease",
+            position: "absolute",
+            top: "40px",
+            right: "0",
+            backgroundColor: "white",
+            color: "rgb(0, 0, 0)",
+            fontFamily: "Arial",
+            padding: "10px",
+            borderRadius: "5px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+            width: "250px",
+            gap: "10px",
+            zIndex: 1000
           }}
         >
-          <FaBell size={24} />
-        </button>
-        {notificationOpen && (
-          <div
-            style={{
-              position: "absolute",
-              top: "60px",
-              left: "20px",
-              backgroundColor: "white",
-              padding: "10px",
-              borderRadius: "5px",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-              width: "200px",
-            }}
-          >
-            <p>New Notification!</p>
-          </div>
-        )}
+          <h4 style={{ margin: "0 0 10px 0", fontSize: "14px", fontWeight: "bold" }}>Notifications</h4>
+          {notifications.length > 0 ? (
+            notifications.map((notif, index) => (
+              <div key={index} style={{ borderBottom: "1px solid #ddd", padding: "5px 0" }}>
+                <p style={{ margin: "0", fontSize: "13px" }}>
+                  📌 <strong>{notif.module}</strong><br />
+                  📅 {notif.date} | ⏰ {notif.time}<br />
+                  🏛 {notif.hall}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p style={{ fontSize: "13px", color: "gray" }}>No new notifications</p>
+          )}
+        </div>
+      )}
+    </div>
 
         {/* Profile Button */}
         <Link to="/profile">
