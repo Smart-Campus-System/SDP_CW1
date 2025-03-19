@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaUserGraduate, FaChalkboardTeacher, FaUsers, FaBook, FaChartPie } from "react-icons/fa";
 import "./DashboardPage.css";
 import Layout from '../pages/Layout';
 import axios from "axios"; // For making API calls
 
 const Analytics = () => {
-  
+  const navigate = useNavigate();
   const [role, setRole] = useState(null);
   const [analytics, setAnalytics] = useState({
     totalStudents: 0,
@@ -65,12 +66,34 @@ const Analytics = () => {
     // fetchAnalyticsData();
   }, []);
 
- 
+  const navigateToResourcePage = () => {
+    navigate("/resource");
+  };
+
+  const navigateToRegisterPage = () => {
+    navigate("/register");
+  };
 
   return (
     <Layout>
       <div className="dashboard-container">
-    
+      <div className="welcome-container">
+  <div className="welcome-message">
+    <h1>Welcome to the Smart Campus Dashboard</h1>
+
+    {role === "admin" && (
+      <div>
+        <button className="navigate-button1" onClick={navigateToRegisterPage}>
+          Register Students & Lecturers
+        </button>
+      </div>
+    )}
+
+    <button className="navigate-button" onClick={navigateToResourcePage}>
+      Go to Resource Page
+    </button>
+  </div>
+</div>
 
 
         {/* Analytics Section */}
