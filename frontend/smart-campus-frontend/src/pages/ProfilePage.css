@@ -58,50 +58,96 @@
 }
 
 .actions {
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 465px;
 }
 
-.save-btn,
-.delete-btn,
-.sign-out-btn {
+button {
   width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  padding: 10px;
+  font-size: 1em;
   font-weight: bold;
+  border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
+  border: 2px solid transparent;
 }
 
 .save-btn {
-  background-color: #4caf50;
+  background-color: #52B788;
   color: white;
-  margin-bottom: 10px;
 }
 
 .save-btn:hover {
-  background-color: #45a049;
+  background-color: #40916C;
 }
 
 .delete-btn {
-  background-color: #e74c3c;
+  background-color: #D9534F;
   color: white;
-  margin-bottom: 10px;
 }
 
 .delete-btn:hover {
-  background-color: #c0392b;
+  background-color: #B71C1C;
 }
 
 .sign-out-btn {
-  background-color: #3498db;
+  background-color: #2D6A4F;
   color: white;
 }
 
 .sign-out-btn:hover {
-  background-color: #2980b9;
+  background-color: #1B4332;
 }
+
+.change-password-btn {
+  background-color: transparent;
+  color: #1B4332;
+  border: 2px solid #1B4332;
+}
+
+.change-password-btn:hover {
+  background-color: #1B4332;
+  color: white;
+}
+
+/* Password Change Form */
+.password-change-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+}
+
+.password-change-form input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+.password-change-form button {
+  background-color: #40916C;
+  color: white;
+  border: 2px solid #2D6A4F;
+}
+
+.password-change-form button:hover {
+  background-color: #2D6A4F;
+}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {

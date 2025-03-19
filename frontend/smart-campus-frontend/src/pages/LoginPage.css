@@ -37,7 +37,7 @@
   /* Title */
   .login-title {
     text-align: center;
-    color: #00796b;
+    color: #52B788;
   }
   
   /* Error Message */
@@ -48,11 +48,11 @@
   
   /* Input Fields */
   .login-input {
-    width: 100%;
+    width: 93%;
     padding: 12px;
     margin-bottom: 15px;
     border-radius: 5px;
-    border: 1px solid #ddd;
+    border: 1px solid #40916C;
     font-size: 16px;
   }
   
@@ -60,7 +60,7 @@
   .login-button {
     width: 100%;
     padding: 12px;
-    background-color: #00796b;
+    background-color: #40916C;
     color: white;
     font-size: 16px;
     font-weight: bold;
@@ -72,6 +72,6 @@
   }
   
   .login-button:hover {
-    background-color: #00a390;
+    background-color: #2D6A4F;
   }
   

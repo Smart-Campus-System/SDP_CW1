@@ -10,8 +10,8 @@ const Layout = ({ children }) => {
       <div
         style={{
           marginLeft: '250px', // Space for the Sidebar
-          paddingTop: '70px', // Space for the Navbar
-          paddingRight: '20px',
+          paddingTop: '10px', // Space for the Navbar
+          paddingRight: '2px',
           paddingLeft: '20px',
         }}
       >

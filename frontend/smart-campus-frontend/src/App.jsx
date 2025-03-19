@@ -11,6 +11,7 @@ import ModulesPage from './pages/ModulesPage';
 import ModuleDetailsPage from './pages/ModuleDetailsPage';
 import ProfilePage from './pages/ProfilePage';
 import ResourcePage from './pages/ResourcePage';
+import Analytics from './pages/Analytics';
 
 const App = () => {
   return (
@@ -27,6 +28,10 @@ const App = () => {
         <Route
           path="/dashboard"
           element={<DashboardPage />}
+        />
+        <Route
+          path="/analytics"
+          element={<Analytics />}
         />
         <Route path="/calendar" element={<Layout><CalendarPage /></Layout>} />
         <Route path="/event" element={<Layout><EventPage /></Layout>} />

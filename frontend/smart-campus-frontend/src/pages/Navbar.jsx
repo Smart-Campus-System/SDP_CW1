@@ -38,7 +38,7 @@ const Navbar = () => {
         justifyContent: "flex-end", // Align items to the left
         alignItems: "center",
         padding: "2px 20px",
-        backgroundColor: "#00796b",
+        backgroundColor: "#40916C",
         color: "white",
         position: "",
         top: 0,
