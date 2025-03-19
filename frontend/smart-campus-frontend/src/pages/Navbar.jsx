@@ -4,11 +4,15 @@ import { Link } from "react-router-dom";
 import './Navbar.css'; // Importing the CSS file
 import DefaultAvatar from "../assets/avatar.png";
 import LogoWhite from "../assets/LogoWhite.png";
+import axios from "axios";
+
 
 
 const Navbar = () => {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null); // State to store profile picture
+  const [notifications, setNotifications] = useState([]); // State to store fetched notifications
+
 
   useEffect(() => {
     // Fetch the profile picture from localStorage
@@ -16,7 +20,26 @@ const Navbar = () => {
     if (storedProfilePicture) {
       setProfilePicture(storedProfilePicture); // Set the profile picture if available
     }
+    fetchNotifications(); // Fetch event notifications on component mount
+
   }, []);
+
+  // Fetch event data from backend API
+  const fetchNotifications = async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await axios.get("http://localhost:5000/api/events", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (response.status === 200) {
+        setNotifications(response.data); // Set events as notifications
+      }
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    }
+  };
 
   const toggleNotifications = () => {
     setNotificationOpen(!notificationOpen);
@@ -47,7 +70,7 @@ const Navbar = () => {
         style={{
           display: "flex",
           alignItems: "center",
-          gap: "20px",
+          gap: "10px",
           marginLeft: "10px", // Add some spacing from the left edge
         }}
       >
@@ -65,35 +88,56 @@ const Navbar = () => {
           <FaComments size={24} />
         </button>
 
-        {/* Notification Dropdown Button */}
-        <button
-          onClick={toggleNotifications}
+        <div style={{ position: "relative", display: "inline-block" }}>
+      {/* Notification Bell Button */}
+      <button
+        onClick={toggleNotifications}
+        style={{
+          backgroundColor: "transparent",
+          border: "none",
+          color: "white",
+          cursor: "pointer",
+          transition: "color 0.3s ease",
+          marginLeft: "0px"
+        }}
+      >
+        <FaBell size={24} />
+      </button>
+
+      {/* Notification Dropdown */}
+      {notificationOpen && (
+        <div
           style={{
-            backgroundColor: "transparent",
-            border: "none",
-            color: "white",
-            cursor: "pointer",
-            transition: "color 0.3s ease",
+            position: "absolute",
+            top: "40px",
+            right: "0",
+            backgroundColor: "white",
+            color: "black",
+            padding: "10px",
+            fontFamily: "Arial",
+            borderRadius: "5px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+            width: "250px",
+            zIndex: 1000
           }}
         >
-          <FaBell size={24} />
-        </button>
-        {notificationOpen && (
-          <div
-            style={{
-              position: "absolute",
-              top: "60px",
-              left: "20px",
-              backgroundColor: "white",
-              padding: "10px",
-              borderRadius: "5px",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-              width: "200px",
-            }}
-          >
-            <p>New Notification!</p>
-          </div>
-        )}
+          <h4 style={{ margin: "0 0 10px 0", fontSize: "14px", fontWeight: "bold" }}>Notifications</h4>
+              {notifications.length > 0 ? (
+                notifications.map((event, index) => (
+                  <div key={index} style={{ borderBottom: "1px solid #ddd", padding: "5px 0" }}>
+                    <p style={{ margin: "0", fontSize: "13px" }}>
+                      📌 <strong>{event.title}</strong><br />
+                      📅 {event.date} | ⏰ {event.time}<br />
+                      📍 {event.location}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <p style={{ fontSize: "13px", textAlign: "center", margin: "10px 0" }}>No new notifications</p>
+              )}
+            </div>
+          )}
+        </div>
 
         {/* Profile Button */}
         <Link to="/profile">

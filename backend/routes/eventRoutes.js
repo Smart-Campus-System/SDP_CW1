@@ -6,58 +6,48 @@ import Notification from "../models/Notification.js";
 import User from "../models/User.js";
 import { sendNotificationEmail } from "../utils/notificationService.js";
 
-
 const router = express.Router();
 
 // 🔹 Create an Event (Admin/Lecturer Only)
 router.post("/", authMiddleware, async (req, res) => {
-    try {
-      const { title, description, date, time, location } = req.body;
-  
-      const event = new Event({
-        title,
-        description,
-        date,
-        time,
-        location,
-        createdBy: req.user.id,
-      });
-  
-      await event.save();
-  
-      // Fetch all users (students)
-      const users = await User.find({ role: "student" });
-  
-      // Send notification to each student
-      users.forEach(async (user) => {
-        const notification = new Notification({
-          userId: user._id,
-          message: `New Event: ${title} at ${location} on ${date} at ${time}`,
-        });
-  
-        await notification.save();
-  
-        // Send email notification
-        sendNotificationEmail(user.email, "New Event Notification", notification.message);
-      });
-  
-      res.status(201).json({ msg: "Event created and notifications sent!", event });
-    } catch (error) {
-      res.status(500).json({ msg: "Server error", error });
-    }
-  });
+  try {
+    const { title, description, date, time, location, image } = req.body;
 
-  // 🔹 Get User Notifications
-router.get("/notifications/:userId", authMiddleware, async (req, res) => {
-    try {
-      const notifications = await Notification.find({ userId: req.params.userId }).sort({ createdAt: -1 });
-      res.json(notifications);
-    } catch (error) {
-      res.status(500).json({ msg: "Server error", error });
-    }
-  });
+    const event = new Event({
+      title,
+      description,
+      date,
+      time,
+      location,
+      image, // Save image URL
+      createdBy: req.user.id,
+    });
 
-// 🔹 Get All Events
+    await event.save();
+
+    // Fetch all users (students)
+    const users = await User.find({ role: "student" });
+
+    // Send notification to each student
+    users.forEach(async (user) => {
+      const notification = new Notification({
+        userId: user._id,
+        message: `New Event: ${title} at ${location} on ${date} at ${time}`,
+      });
+
+      await notification.save();
+
+      // Send email notification
+      sendNotificationEmail(user.email, "New Event Notification", notification.message);
+    });
+
+    res.status(201).json({ msg: "Event created and notifications sent!", event });
+  } catch (error) {
+    res.status(500).json({ msg: "Server error", error });
+  }
+});
+
+// 🔹 Get All Events (Include Image)
 router.get("/", async (req, res) => {
   try {
     const events = await Event.find().populate("createdBy", "name email");
@@ -77,12 +67,13 @@ router.put("/:id", authMiddleware, async (req, res) => {
       return res.status(403).json({ msg: "Unauthorized" });
     }
 
-    const { title, description, date, time, location } = req.body;
+    const { title, description, date, time, location, image } = req.body;
     event.title = title || event.title;
     event.description = description || event.description;
     event.date = date || event.date;
     event.time = time || event.time;
     event.location = location || event.location;
+    event.image = image || event.image;
 
     await event.save();
     res.json({ msg: "Event updated successfully", event });

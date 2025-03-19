@@ -4,7 +4,7 @@
     justify-content: flex-end;
     align-items: center;
     padding: 2px 20px;
-    background-color: #00796b;
+    background-color: #40916C;
     color: white;
     position: relative;
     top: 0;
@@ -41,6 +41,7 @@
     color: white;
     cursor: pointer;
     transition: color 0.3s ease;
+    margin-left: -10px;
   }
   
   .profile-button {
@@ -48,6 +49,7 @@
     border: none;
     cursor: pointer;
     transition: color 0.3s ease;
+    margin-left: -10px;
   }
   
   .profile-image {

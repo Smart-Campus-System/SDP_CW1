@@ -150,46 +150,40 @@ const ProfilePage = () => {
         </div>
 
         <div className="actions">
-          <button className="save-btn" onClick={handleSave} disabled={!isEditable}>
-            {isSaved ? 'Saved' : 'Save'}
-          </button>
-          <button className="delete-btn" onClick={handleDelete}>
-            Delete Account
-          </button>
-          <button className="sign-out-btn" onClick={handleSignOut}>
-            Sign Out
-          </button>
+  <button className="save-btn" onClick={handleSave} disabled={!isEditable}>
+    {isSaved ? "Saved" : "Save"}
+  </button>
+  <button className="delete-btn" onClick={handleDelete}>Delete Account</button>
+  <button className="sign-out-btn" onClick={handleSignOut}>Sign Out</button>
 
-          {/* Change Password Button */}
-          <button className="change-password-btn" onClick={() => setIsChangingPassword(true)}>
-            Change Password
-          </button>
+  {/* Change Password Button */}
+  <button className="change-password-btn" onClick={() => setIsChangingPassword(true)}>
+    Change Password
+  </button>
 
-          {/* Password Change Form */}
-          <form onSubmit={handlePasswordChange}>
-            {isChangingPassword && (
-              <div className="password-change-form">
-                <input
-                  type="password"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                  placeholder="Old Password"
-                  required
-                />
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="New Password"
-                  required
-                />
-                <button type="submit" >Update Password</button>
-                {passwordError && <p className="error">{passwordError}</p>}
-              </div>
-            )}
-          </form>
+  {/* Password Change Form */}
+  {isChangingPassword && (
+    <form onSubmit={handlePasswordChange} className="password-change-form">
+      <input
+        type="password"
+        value={oldPassword}
+        onChange={(e) => setOldPassword(e.target.value)}
+        placeholder="Old Password"
+        required
+      />
+      <input
+        type="password"
+        value={newPassword}
+        onChange={(e) => setNewPassword(e.target.value)}
+        placeholder="New Password"
+        required
+      />
+      <button type="submit">Update Password</button>
+      {passwordError && <p className="error">{passwordError}</p>}
+    </form>
+  )}
+</div>
 
-        </div>
       </div>
     </div>
   );
