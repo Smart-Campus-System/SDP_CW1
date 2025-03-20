@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios"; // Axios for API requests
 import { useNavigate } from "react-router-dom"; // Redirect to other pages after successful event creation
 import './SchedulerPage.css';
+import { ToastContainer, toast } from 'react-toastify';
+import './ReactToastify.css';
+
 
 const SchedulerPage = () => {
   const [title, setTitle] = useState('');
@@ -59,12 +62,11 @@ const SchedulerPage = () => {
       });
 
       if (response.status === 200 || response.status === 201) {
-        alert('Lecture scheduled successfully!');
-        navigate('/dashboard'); // Redirect after successful scheduling
+        toast.success('Lecture scheduled successfully!');
+        // navigate('/dashboard'); // Redirect after successful scheduling
       }
     } catch (err) {
-      setError('Failed to schedule the lecture. Please try again.');
-      console.error(err);
+      toast.err('Failed to schedule the lecture. Please try again.');
     }
   };
 
@@ -151,6 +153,7 @@ const SchedulerPage = () => {
 
         <button type="submit" className="submit-btn">Schedule Lecture</button>
       </form>
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick pauseOnHover />
     </div>
   );
 };

@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios"; // Axios for API requests
 import { useNavigate } from "react-router-dom"; // Redirect to other pages after successful event creation
 import "./EventPage.css";
+import { ToastContainer, toast } from 'react-toastify';
+import './ReactToastify.css';
 
 const EventPage = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dateTime, setDateTime] = useState('');
   const [location, setLocation] = useState('');
+  const [image, setImage] = useState(null); // State for image
   const [error, setError] = useState('');
   const [locations, setLocations] = useState([]);  // State to store locations
   const navigate = useNavigate(); // To navigate to other pages
@@ -24,7 +27,7 @@ const EventPage = () => {
 
       setLocations(response.data.locations);  // Set locations in state
     } catch (error) {
-      console.error("Error fetching locations:", error);
+      toast.error("Error fetching locations:", error);
       setError("Failed to load locations.");
     }
   };
@@ -32,6 +35,14 @@ const EventPage = () => {
   useEffect(() => {
     fetchLocations(); // Fetch locations when the component mounts
   }, []);
+
+  // Handle image upload
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file); // Set the selected image
+    }
+  };
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -48,23 +59,29 @@ const EventPage = () => {
 
     const token = localStorage.getItem('token'); // Get the auth token
 
-    try {
-      const eventData = { title, description, date, time, location }; // Send date & time separately
+    // Create a FormData object to handle image and event data
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('date', date);
+    formData.append('time', time);
+    formData.append('location', location);
+    if (image) formData.append('image', image); // Append image if selected
 
-      const response = await axios.post('http://localhost:5000/api/events/', eventData, {
+    try {
+      const response = await axios.post('http://localhost:5000/api/events/', formData, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data', // Set content type for file upload
           'Authorization': `Bearer ${token}`, // Ensure the user is authenticated
         },
       });
 
       if (response.status === 200 || response.status === 201) {
-        alert('Event created successfully!');
+        toast.success('Event created successfully!');
         navigate('/dashboard'); // Redirect user
       }
     } catch (err) {
-      setError('Failed to create the event. Please try again.');
-      console.error(err);
+      toast.error('Failed to create the event. Please try again.');
     }
   };
 
@@ -121,15 +138,26 @@ const EventPage = () => {
             <option value="">Select Event Location</option>
             {locations.map((location, index) => (
               <option key={index} value={location}>
-                {location} {/* Display hall name */}
+                {location}
               </option>
             ))}
           </select>
         </div>
 
+        {/* Image Upload Input */}
+        <div className="form-group">
+          <label htmlFor="image">Event Image</label>
+          <input
+            type="file"
+            id="image"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+        </div>
 
         <button type="submit" className="submit-btn">Create Event</button>
       </form>
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick pauseOnHover />
     </div>
   );
 };

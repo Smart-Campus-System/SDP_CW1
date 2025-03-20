@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import './ModuleDetailsPage.css';
+import { ToastContainer, toast } from 'react-toastify';
+import './ReactToastify.css';
 
 const ModuleDetailsPage = () => {
     const { moduleId } = useParams();
@@ -38,6 +39,113 @@ const ModuleDetailsPage = () => {
         fetchUserRole();
     }, []);
 
+    // ✅ Fetch module details
+    useEffect(() => {
+        const fetchModuleDetails = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5000/api/modules/${moduleId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` },
+                });
+
+                setModule(response.data);
+            } catch (err) {
+                setError('Failed to fetch module details.');
+            }
+        };
+
+        if (token) fetchModuleDetails();
+    }, [moduleId, token]);
+
+    // ✅ Toggle Assignment Upload Modal
+    const toggleModal = () => {
+        setShowModal(!showModal);
+    };
+
+    // ✅ Handle Assignment Upload
+    const handleUploadAssignment = async () => {
+        if (!assignmentFile) {
+            toast.success("Please select a file for the assignment.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("title", newAssignment.title);
+        formData.append("description", newAssignment.description);
+        formData.append("dueDate", newAssignment.dueDate);
+        formData.append("file", assignmentFile); // Add file to the FormData
+
+        try {
+            const response = await axios.post(
+                `http://localhost:5000/api/assignments/${moduleId}/assignments`,
+                formData,
+                {
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
+                }
+            );
+
+            toast.success('Assignment uploaded successfully!');
+            setModule({ ...module, assignments: [...module.assignments, response.data.assignment] });
+            setNewAssignment({ title: '', description: '', dueDate: '' });
+            setAssignmentFile(null);
+            setShowModal(false);
+        } catch (error) {
+            toast.error('Failed to upload assignment.');
+        }
+    };
+
+    // ✅ Handle Answer Submission (For Students)
+    const handleSubmitAnswer = async (assignmentId) => {
+        if (!answerFile) {
+            alert("Please select a file to upload.");
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("answerFile", answerFile);
+
+            const response = await axios.post(
+                `http://localhost:5000/api/assignments/${assignmentId}/submit`,
+                formData,
+                {
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
+                }
+            );
+
+            toast.success('Assignment submitted successfully!');
+            setAnswerFile(null);
+        } catch (error) {
+            toast.error('Failed to submit assignment.');
+        }
+    };
+
+    // ✅ Handle Resubmission of Assignment (For Students)
+    const handleResubmitAssignment = async (assignmentId) => {
+        if (!answerFile) {
+            alert("Please select a file to resubmit.");
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("answerFile", answerFile);
+
+            const response = await axios.post(
+                `http://localhost:5000/api/assignments/${assignmentId}/resubmit`,
+                formData,
+                {
+                    headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
+                }
+            );
+
+            toast.success("Assignment resubmitted successfully!");
+            setAnswerFile(null);
+        } catch (error) {
+            toast.error("Failed to resubmit assignment.");
+        }
+    };
+
+    // ✅ Handle Download Submission (For Admins/Lecturers)
     const handleDownloadSubmission = async (assignmentId, submissionId, fileName) => {
         try {
             const response = await axios.get(
@@ -61,113 +169,6 @@ const ModuleDetailsPage = () => {
         }
     };
 
-
-    // ✅ Fetch module details
-    useEffect(() => {
-        const fetchModuleDetails = async () => {
-            try {
-                const response = await axios.get(`http://localhost:5000/api/modules/${moduleId}`, {
-                    headers: { 'Authorization': `Bearer ${token}` },
-                });
-
-                setModule(response.data);
-            } catch (err) {
-                setError('Failed to fetch module details.');
-            }
-        };
-
-        if (token) fetchModuleDetails();
-    }, [moduleId, token]);
-
-    // ✅ Toggle Assignment Upload Modal
-    const toggleModal = () => {
-        setShowModal(!showModal);
-    };
-
-    const handleUploadAssignment = async () => {
-        if (!assignmentFile) {
-          alert("Please select a file for the assignment.");
-          return;
-        }
-      
-        try {
-          const formData = new FormData();
-          formData.append("title", newAssignment.title);
-          formData.append("description", newAssignment.description);
-          formData.append("dueDate", newAssignment.dueDate);
-          formData.append("file", assignmentFile); // Add file to the FormData
-      
-          const response = await axios.post(
-            `http://localhost:5000/api/assignments/${moduleId}/assignments`,
-            formData,
-            {
-              headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
-            }
-          );
-      
-          alert('Assignment uploaded successfully!');
-          setModule({ ...module, assignments: [...module.assignments, response.data.assignment] });
-          setNewAssignment({ title: '', description: '', dueDate: '' });
-          setAssignmentFile(null);
-          setShowModal(false);
-        } catch (error) {
-          alert('Failed to upload assignment.');
-        }
-      };
-      
-
-    // ✅ Handle Answer Submission (For Students)
-    const handleSubmitAnswer = async (assignmentId) => {
-        if (!answerFile) {
-            alert("Please select a file to upload.");
-            return;
-        }
-
-        try {
-            const formData = new FormData();
-            formData.append("answerFile", answerFile);
-
-            const response = await axios.post(
-                `http://localhost:5000/api/assignments/${assignmentId}/submit`,
-                formData,
-                {
-                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
-                }
-            );
-
-            alert('Assignment submitted successfully!');
-            setAnswerFile(null);
-        } catch (error) {
-            alert('Failed to submit assignment.');
-        }
-    };
-
-    const handleResubmitAssignment = async (assignmentId) => {
-        if (!answerFile) {
-            alert("Please select a file to resubmit.");
-            return;
-        }
-
-        try {
-            const formData = new FormData();
-            formData.append("answerFile", answerFile);
-
-            const response = await axios.post(
-                `http://localhost:5000/api/assignments/${assignmentId}/resubmit`,
-                formData,
-                {
-                    headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
-                }
-            );
-
-            alert("Assignment resubmitted successfully!");
-            setAnswerFile(null);
-        } catch (error) {
-            alert("Failed to resubmit assignment.");
-        }
-    };
-
-
     // ✅ Pie Chart Colors
     const COLORS = ['#00C49F', '#FFBB28'];
 
@@ -175,33 +176,6 @@ const ModuleDetailsPage = () => {
         <div className="module-details-container">
             {error && <p className="error">{error}</p>}
             <h2>{module?.title}</h2>
-
-            {/* ✅ Debugging Role */}
-            <p>User Role: {role || "Loading..."}</p>
-
-            {/* Pie Chart for Completion */}
-            <div className="chart-container">
-                {/* <ResponsiveContainer width="100%" height={200}>
-                    <PieChart>
-                        <Pie
-                            data={[
-                                { name: 'Completed', value: module?.completionPercentage || 0 },
-                                { name: 'Remaining', value: 100 - (module?.completionPercentage || 0) }
-                            ]}
-                            cx="50%"
-                            cy="50%"
-                            innerRadius={50}
-                            outerRadius={70}
-                            fill="#8884d8"
-                            dataKey="value"
-                        >
-                            <Cell fill={COLORS[0]} />
-                            <Cell fill={COLORS[1]} />
-                        </Pie>
-                        <Tooltip />
-                    </PieChart>
-                </ResponsiveContainer> */}
-            </div>
 
             {/* Display Assignments */}
             <h3>Assignments</h3>
@@ -212,16 +186,26 @@ const ModuleDetailsPage = () => {
                         <p>{assignment.description}</p>
                         <p>Due Date: {new Date(assignment.dueDate).toLocaleDateString()}</p>
 
-                        {/* Students can Submit Answers */}
-                        {role === 'student' && (
+                        {/* Admin/Lecturer can download student submissions */}
+                        {role === "admin" || role === "lecturer" ? (
                             <div>
-                                <input type="file" onChange={(e) => setAnswerFile(e.target.files[0])} />
-                                <button className="submit-btn" onClick={() => handleSubmitAnswer(assignment._id)}>Submit Answer</button>
-                                {/* // ✅ Add this inside the Assignment Submission Table UI */}
-                                <button onClick={() => handleDownloadSubmission(assignment._id, submission._id, submission.answerFile.filename)}>
+                                <button
+                                    onClick={() =>
+                                        handleDownloadSubmission(
+                                            assignment._id,
+                                            assignment.submission._id,
+                                            assignment.submission.answerFile.filename
+                                        )
+                                    }
+                                >
                                     Download Submission
                                 </button>
-                                {/* // ✅ Add this inside the Assignment Submission Table UI */}
+                            </div>
+                        ) : (
+                            // Student functionalities
+                            <div>
+                                <input type="file" onChange={(e) => setAnswerFile(e.target.files[0])} />
+                                <button onClick={() => handleSubmitAnswer(assignment._id)}>Submit Answer</button>
                                 <button onClick={() => handleResubmitAssignment(assignment._id)}>
                                     Resubmit Answer
                                 </button>
@@ -231,14 +215,14 @@ const ModuleDetailsPage = () => {
                 ))}
             </ul>
 
-            {/* ✅ Show Upload Button for Admins & Lecturers */}
+            {/* Show Upload Button for Admins & Lecturers */}
             {(role === 'admin' || role === 'lecturer') && (
                 <div className="upload-section">
                     <button className="upload-btn" onClick={toggleModal}>Upload Assignment</button>
                 </div>
             )}
 
-            {/* ✅ Modal for Uploading Assignments */}
+            {/* Modal for Uploading Assignments */}
             {showModal && (
                 <div className="modal">
                     <div className="modal-content">
@@ -254,6 +238,7 @@ const ModuleDetailsPage = () => {
                     </div>
                 </div>
             )}
+            <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick pauseOnHover />
         </div>
     );
 };

@@ -28,12 +28,14 @@ const Sidebar = () => {
         </button>
       </Link>
 
-      <Link to="/analytics">
-        <button className="sidebar-button">
-          <FaChartPie className="icon" />
-          Analytics
-        </button>
-      </Link>
+        <Link to="/analytics">
+          <button className="sidebar-button">
+            <FaChartPie className="icon" />
+            Analytics
+          </button>
+        </Link>
+      
+
 
       {/* Scheduler Button with hover effect */}
       <button onClick={toggleScheduler} className="sidebar-button">
