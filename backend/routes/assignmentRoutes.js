@@ -2,37 +2,74 @@ import express from "express";
 import multer from "multer";
 import authMiddleware from "../middleware/authMiddleware.js";
 import Assignment from "../models/Assignment.js";
+import Module from '../models/Module.js';
 
 const router = express.Router();
 
-// ✅ Configure Multer for Memory Storage (Stores in MongoDB)
-const storage = multer.memoryStorage(); // ✅ Store file in memory buffer
-const upload = multer({ storage });
+// Set up multer storage for file uploads
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//       cb(null, 'uploads/'); // Save files to 'uploads' directory
+//     },
+//     filename: function (req, file, cb) {
+//       cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
+//     }
+//   });
+
+// Set up multer storage to store file data as Buffer
+const storage = multer.memoryStorage();  // Using memoryStorage to store the file in memory (as Buffer)
+const upload = multer({ storage: storage });  // Multer middleware for handling file uploads
 
 // ✅ 1️⃣ Upload Assignment (Admin/Lecturer Only)
-router.post("/:moduleId/assignments", authMiddleware, async (req, res) => {
+router.post("/:moduleId/assignments", authMiddleware, upload.single('file'), async (req, res) => {
     try {
-        if (req.user.role !== "admin" && req.user.role !== "lecturer") {
-            return res.status(403).json({ message: "Unauthorized" });
-        }
-
-        const { title, description, dueDate } = req.body;
-        const moduleId = req.params.moduleId;
-
-        const assignment = new Assignment({
-            moduleId,
-            title,
-            description,
-            dueDate,
-            uploadedBy: req.user._id
-        });
-
-        await assignment.save();
-        res.status(201).json({ message: "Assignment uploaded successfully!", assignment });
+      if (req.user.role !== "admin" && req.user.role !== "lecturer") {
+        return res.status(403).json({ message: "Unauthorized" });
+      }
+  
+      // Extract fields from the request body
+      const { title, description, dueDate } = req.body;
+      const moduleId = req.params.moduleId;
+  
+      // Check if the file was uploaded
+      if (!req.file) {
+        return res.status(400).json({ message: 'No file uploaded' });
+      }
+  
+      // Create a new assignment document and store the file as a Buffer in MongoDB
+      const assignment = new Assignment({
+        moduleId,
+        title,
+        description,
+        dueDate,
+        uploadedBy: req.user._id,
+        answerFile: {
+          data: req.file.buffer,  // Store the file data as Buffer
+          contentType: req.file.mimetype,  // Store the file MIME type (e.g., "application/pdf")
+          filename: req.file.originalname,  // Store the original filename
+        },
+      });
+  
+      // Save the assignment to the database
+      await assignment.save();
+  
+      // Add the assignment to the module's assignments array
+      const module = await Module.findById(moduleId);
+      if (!module) {
+        return res.status(404).json({ message: 'Module not found' });
+      }
+  
+      module.assignments.push(assignment._id);
+      await module.save();
+  
+      // Respond with the saved assignment data
+      res.status(201).json({ message: "Assignment uploaded successfully!", assignment });
+  
     } catch (error) {
-        res.status(500).json({ message: "Server Error", error });
+      console.error('Error uploading assignment:', error);
+      res.status(500).json({ message: "Server Error", error });
     }
-});
+  });
 
 // ✅ 2️⃣ Submit Assignment (Student Only) - Store File in MongoDB
 router.post("/:assignmentId/submit", authMiddleware, upload.single("answerFile"), async (req, res) => {

@@ -138,17 +138,14 @@ const SchedulerPage = () => {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             required
+            className="event-location-dropdown"
           >
-            <option value="">Select location</option>
-            {locations.length > 0 ? (
-              locations.map((loc, index) => (
-                <option key={index} value={loc}>
-                  {loc}
-                </option>
-              ))
-            ) : (
-              <option disabled>No locations available</option>
-            )}
+            <option value="">Select Event Location</option>
+            {locations.map((location, index) => (
+              <option key={index} value={location}>
+                {location} {/* Display hall name */}
+              </option>
+            ))}
           </select>
         </div>
 
