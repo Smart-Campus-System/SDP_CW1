@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios"; // Axios for API requests
 import { useNavigate } from "react-router-dom"; // Redirect to other pages after successful event creation
+import "./EventPage.css";
 
 const EventPage = () => {
   const [title, setTitle] = useState('');
@@ -35,28 +36,28 @@ const EventPage = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Ensure dateTime and location are selected
     if (!dateTime || !location) {
       setError('Please select a date, time, and location.');
       return;
     }
-  
+
     // Extract date and time from dateTime input
     const [date, time] = dateTime.split('T');  // Splits "2024-02-27T14:30" into ["2024-02-27", "14:30"]
-  
+
     const token = localStorage.getItem('token'); // Get the auth token
-  
+
     try {
       const eventData = { title, description, date, time, location }; // Send date & time separately
-  
+
       const response = await axios.post('http://localhost:5000/api/events/', eventData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`, // Ensure the user is authenticated
         },
       });
-  
+
       if (response.status === 200 || response.status === 201) {
         alert('Event created successfully!');
         navigate('/dashboard'); // Redirect user
@@ -115,6 +116,7 @@ const EventPage = () => {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             required
+            className="event-location-dropdown"
           >
             <option value="">Select Event Location</option>
             {locations.map((location, index) => (
@@ -124,6 +126,7 @@ const EventPage = () => {
             ))}
           </select>
         </div>
+
 
         <button type="submit" className="submit-btn">Create Event</button>
       </form>

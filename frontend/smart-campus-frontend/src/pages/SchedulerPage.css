@@ -76,3 +76,53 @@
     cursor: not-allowed;
   }
   
+  /* Styling the form group */
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* Styling the label */
+.form-group label {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* Styling the select dropdown */
+.event-location-dropdown {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Add hover effect */
+.event-location-dropdown:hover {
+  border-color: #4caf50;  /* Green border on hover */
+}
+
+/* Add focus effect */
+.event-location-dropdown:focus {
+  outline: none;
+  border-color: #4caf50;  /* Green border when focused */
+  background-color: #f9f9f9;
+}
+
+/* Styling the options */
+.event-location-dropdown option {
+  padding: 10px;
+  font-size: 1em;
+}
+
+/* Optional: style for placeholder option */
+.event-location-dropdown option[value=""] {
+  font-style: italic;
+  color: #888;
+}

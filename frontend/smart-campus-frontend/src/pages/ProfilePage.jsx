@@ -149,19 +149,8 @@ const ProfilePage = () => {
           />
         </div>
 
-        <div className="actions">
-          <button className="save-btn" onClick={handleSave} disabled={!isEditable}>
-            {isSaved ? 'Saved' : 'Save'}
-          </button>
-          <button className="delete-btn" onClick={handleDelete}>
-            Delete Account
-          </button>
-          <button className="sign-out-btn" onClick={handleSignOut}>
-            Sign Out
-          </button>
-
-          {/* Change Password Button */}
-          <button className="change-password-btn" onClick={() => setIsChangingPassword(true)}>
+        {/* Change Password Button */}
+        <button className="change-password-btn" onClick={() => setIsChangingPassword(true)}>
             Change Password
           </button>
 
@@ -188,6 +177,21 @@ const ProfilePage = () => {
               </div>
             )}
           </form>
+
+        <div className="actions">
+          <button className="save-btn" onClick={handleSave} disabled={!isEditable}>
+            {isSaved ? 'Saved' : 'Save'}
+          </button>
+          <button className="delete-btn" onClick={handleDelete}>
+            Delete Account
+          </button>
+          <button className="sign-out-btn" onClick={handleSignOut}>
+            Sign Out
+          </button>
+
+          
+
+          
 
         </div>
       </div>
