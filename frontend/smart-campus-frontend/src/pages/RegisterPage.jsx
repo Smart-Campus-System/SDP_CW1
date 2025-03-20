@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from '../api/axios.js';
 import { useNavigate } from 'react-router-dom';
 import './RegisterPage.css';
+import { ToastContainer, toast } from 'react-toastify';
+import './ReactToastify.css';
+
 
 const RegisterPage = () => {
   const [name, setName] = useState('');
@@ -48,8 +51,8 @@ const RegisterPage = () => {
           Authorization: `Bearer ${token}` 
         }
       });
-      alert("User Registered Successfully!");
-      navigate('/dashboard');
+      toast.success("User Registered Successfully!");
+      // navigate('/dashboard');
     } catch (err) {
       setError('Failed to register. Please try again.');
       console.error("Registration Error:", err);
@@ -90,6 +93,7 @@ const RegisterPage = () => {
           <button type="submit">Register</button>
         </form>
       </div>
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick pauseOnHover />
     </div>
   );
 };

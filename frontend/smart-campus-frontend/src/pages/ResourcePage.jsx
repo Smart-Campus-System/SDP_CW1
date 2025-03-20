@@ -236,7 +236,6 @@ const ResourcePage = () => {
 
       {showModal && (
         <div className="seat-booking-modal">
-          <h3>Book Seat {selectedSeat.seatNumber}</h3>
           <div className="modal-form">
             <label htmlFor="date">Select Date</label>
             <input
@@ -348,7 +347,7 @@ const ResourcePage = () => {
       )}
 
       {/* Toast notifications container */}
-      <ToastContainer position="bottom-left" autoClose={5000} hideProgressBar={false} closeOnClick pauseOnHover />
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick pauseOnHover />
     </div>
   );
 };

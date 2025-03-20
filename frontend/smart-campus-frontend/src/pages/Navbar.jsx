@@ -75,6 +75,7 @@ const Navbar = () => {
         }}
       >
         {/* Chat Button */}
+        <Link to="/message">
         <button
           style={{
             backgroundColor: "transparent",
@@ -87,6 +88,7 @@ const Navbar = () => {
         >
           <FaComments size={24} />
         </button>
+        </Link>
 
         <div style={{ position: "relative", display: "inline-block" }}>
       {/* Notification Bell Button */}

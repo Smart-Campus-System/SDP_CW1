@@ -40,7 +40,7 @@ const App = () => {
         <Route path="/modules" element={<Layout><ModulesPage /></Layout>} />
         <Route path="/modules/:moduleId" element={<Layout><ModuleDetailsPage /></Layout>} />
         <Route path="/resource" element={<Layout><ResourcePage /></Layout>} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile" element={<ProfilePage />} />       
       </Routes>
     </Router>
   );
