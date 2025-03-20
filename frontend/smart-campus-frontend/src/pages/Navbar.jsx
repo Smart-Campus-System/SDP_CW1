@@ -52,6 +52,7 @@ const Navbar = () => {
         }}
       >
         {/* Chat Button */}
+        <Link to='http://192.168.1.9:3000/'>
         <button
           style={{
             backgroundColor: "transparent",
@@ -60,10 +61,10 @@ const Navbar = () => {
             cursor: "pointer",
             transition: "color 0.3s ease",
           }}
-          onClick={() => console.log("Open Chat")}
         >
           <FaComments size={24} />
         </button>
+        </Link>
 
         {/* Notification Dropdown Button */}
         <button

@@ -11,6 +11,10 @@ import ModulesPage from './pages/ModulesPage';
 import ModuleDetailsPage from './pages/ModuleDetailsPage';
 import ProfilePage from './pages/ProfilePage';
 import ResourcePage from './pages/ResourcePage';
+<<<<<<< Updated upstream
+=======
+import Message from './pages/Message';
+>>>>>>> Stashed changes
 
 const App = () => {
   return (
@@ -28,6 +32,10 @@ const App = () => {
           path="/dashboard"
           element={<DashboardPage />}
         />
+<<<<<<< Updated upstream
+=======
+        <Route path='http://192.168.1.9:3000/' element={<Layout><Message /></Layout>}/>
+>>>>>>> Stashed changes
         <Route path="/calendar" element={<Layout><CalendarPage /></Layout>} />
         <Route path="/event" element={<Layout><EventPage /></Layout>} />
         <Route path="/scheduler" element={<Layout><SchedulerPage /></Layout>} />
