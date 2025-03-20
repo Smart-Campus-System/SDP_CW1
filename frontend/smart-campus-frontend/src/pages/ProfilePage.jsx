@@ -18,7 +18,7 @@ const ProfilePage = () => {
 
   const [isEditable, setIsEditable] = useState(true);
   const [isSaved, setIsSaved] = useState(false);
-  const [role, setRole] = useState(null);
+  const [role, setRole] = useState('');
 
   // New state for password change
   const [oldPassword, setOldPassword] = useState('');
@@ -27,7 +27,8 @@ const ProfilePage = () => {
   const [passwordError, setPasswordError] = useState('');
 
   useEffect(() => {
-    // Optionally, you can fetch user data from the backend if you need to
+    const roleFromLocalStorage = localStorage.getItem('role');
+    setRole(roleFromLocalStorage || ''); // Set the role based on localStorage
   }, []);
 
   const handleInputChange = (e) => {
@@ -37,29 +38,6 @@ const ProfilePage = () => {
       [name]: value,
     }));
   };
-
-  // const handleImageUpload = async (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     const formData = new FormData();
-  //     formData.append('profilePhoto', file);
-  //     try {
-  //       const response = await axios.post(
-  //         'http://localhost:5000/api/users/uploadProfilePicture',
-  //         formData,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //             'Content-Type': 'multipart/form-data',
-  //           },
-  //         }
-  //       );
-  //       setProfile({ ...profile, profilePicture: response.data.profilePhoto });
-  //     } catch (error) {
-  //       console.error('Error uploading profile photo:', error);
-  //     }
-  //   }
-  // };
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];

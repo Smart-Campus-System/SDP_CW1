@@ -5,30 +5,45 @@ import adminMiddleware from "../middleware/adminMiddleware.js";
 import Notification from "../models/Notification.js";
 import User from "../models/User.js";
 import { sendNotificationEmail } from "../utils/notificationService.js";
+import multer from "multer";
+
+// Set up multer to handle file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // specify the folder to save uploaded files
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname); // Set file name to avoid conflicts
+  }
+});
+
+// Initialize multer with the storage engine
+const upload = multer({ storage });
+
 
 const router = express.Router();
 
 // 🔹 Create an Event (Admin/Lecturer Only)
-router.post("/", authMiddleware, async (req, res) => {
+router.post("/", authMiddleware, upload.single("image"), async (req, res) => {
   try {
-    const { title, description, date, time, location, image } = req.body;
+    const { title, description, date, time, location } = req.body;
+    const image = req.file ? req.file.path : null; // Saves the relative path to the image
 
+    // Now save the event with the image path in the database
     const event = new Event({
       title,
       description,
       date,
       time,
       location,
-      image, // Save image URL
+      image, // Store the image path
       createdBy: req.user.id,
     });
 
     await event.save();
 
-    // Fetch all users (students)
+    // Notify students about the new event
     const users = await User.find({ role: "student" });
-
-    // Send notification to each student
     users.forEach(async (user) => {
       const notification = new Notification({
         userId: user._id,
@@ -36,8 +51,6 @@ router.post("/", authMiddleware, async (req, res) => {
       });
 
       await notification.save();
-
-      // Send email notification
       sendNotificationEmail(user.email, "New Event Notification", notification.message);
     });
 
@@ -46,6 +59,7 @@ router.post("/", authMiddleware, async (req, res) => {
     res.status(500).json({ msg: "Server error", error });
   }
 });
+
 
 // 🔹 Get All Events (Include Image)
 router.get("/", async (req, res) => {

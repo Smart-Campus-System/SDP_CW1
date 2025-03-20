@@ -210,6 +210,7 @@
   color: #888;
 }
 
+<<<<<<< Updated upstream
 .chart-wrapper {
   display: flex;
   flex-direction: column; /* Title on top */
@@ -249,4 +250,100 @@ h2 {
 .icon {
   color: #1b5e20; /* Change the icon color */
   font-size: 1.5em; /* Adjust icon size if needed */
+=======
+
+/* Style for the event image (on the side) */
+.event-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;  /* Ensure image fills the container without stretching */
+  border-radius: 10px;
+  margin-right: 20px;
+}
+
+/* Style for the event card */
+.event-card {
+  display: flex;
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  align-items: center; /* Align image and content side by side */
+}
+
+/* Style for event content (text details) */
+.event-card-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.event-details {
+  flex: 1;  /* Allow text content to take the remaining space */
+}
+
+.event-title {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.event-date, .event-location {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #666;
+}
+
+.event-description {
+  font-size: 1rem;
+  color: #555;
+}
+
+.no-events {
+  font-size: 1.2rem;
+  color: #999;
+  text-align: center;
+}
+
+.event-card {
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+  background-color: white;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.event-image {
+  max-width: 150px;
+  max-height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 20px;
+}
+
+.event-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.event-title {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.event-date,
+.event-location {
+  color: #888;
+}
+
+.event-description {
+  margin-top: 10px;
+  font-size: 1em;
+  color: #333;
+>>>>>>> Stashed changes
 }
