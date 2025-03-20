@@ -7,6 +7,7 @@ const EventSchema = new mongoose.Schema(
     date: { type: Date, required: true }, // Event date
     time: { type: String, required: true }, // Event time
     location: { type: String, required: true }, // Event location
+    image: { type: String }, // Event image URL
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Admin/Lecturer who created it
     attendees: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Students attending the event
     notified: { type: Boolean, default: false } // New field for notification status

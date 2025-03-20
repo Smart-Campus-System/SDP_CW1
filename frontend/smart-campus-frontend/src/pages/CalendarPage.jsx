@@ -14,7 +14,8 @@ const CalendarPage = () => {
     description: "",
     date: "",
     time: "",
-    location: ""
+    location: "",
+    image: null,
   });
   const [holidays, setHolidays] = useState([]);
 
@@ -22,6 +23,17 @@ const CalendarPage = () => {
     fetchEvents();
     fetchHolidays(); // Fetch holidays (Poya days) on component mount
   }, []);
+
+  // Handle image selection
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setEventDetails((prevDetails) => ({
+        ...prevDetails,
+        image: file, // Store the selected image
+      }));
+    }
+  };
 
   // Fetch events from backend API
   const fetchEvents = async () => {
@@ -148,6 +160,12 @@ const CalendarPage = () => {
             placeholder="Location"
             value={eventDetails.location}
             onChange={(e) => setEventDetails({ ...eventDetails, location: e.target.value })}
+          />
+
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange} // Handle image change
           />
           <button className="save-btn" onClick={handleEventSubmit}>Save</button>
           <button className="cancel-btn" onClick={() => setShowEventModal(false)}>Cancel</button>

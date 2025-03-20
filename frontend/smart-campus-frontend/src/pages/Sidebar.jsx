@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaCalendar, FaTasks, FaCog, FaBook } from 'react-icons/fa'; // Calendar, Scheduler, Modules icons
+import { FaCalendar, FaTasks, FaCog, FaBook, FaChartPie } from 'react-icons/fa'; // Calendar, Scheduler, Modules icons
 import { Link } from 'react-router-dom';
 import './Sidebar.css'; // Import external CSS file
 
@@ -25,6 +25,13 @@ const Sidebar = () => {
         <button className="sidebar-button">
           <FaTasks className="icon" />
           Dashboard
+        </button>
+      </Link>
+
+      <Link to="/analytics">
+        <button className="sidebar-button">
+          <FaChartPie className="icon" />
+          Analytics
         </button>
       </Link>
 

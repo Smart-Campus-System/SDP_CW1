@@ -65,6 +65,8 @@
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin-left: 0px;
+    width: 500px;
   }
   
   button.submit-btn:hover {

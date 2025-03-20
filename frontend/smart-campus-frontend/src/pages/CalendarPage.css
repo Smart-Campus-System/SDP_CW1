@@ -195,6 +195,7 @@
   border-radius: 8px;
   cursor: pointer;
   transition: 0.3s ease-in-out;
+  margin-left: 0px;
 }
 
 .event-modal button:first-of-type {
