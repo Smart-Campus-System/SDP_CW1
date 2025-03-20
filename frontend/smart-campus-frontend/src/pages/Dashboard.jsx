@@ -67,10 +67,22 @@ const DashboardPage = () => {
           {events.length > 0 ? (
             events.map((event, index) => (
               <div key={index} className="event-card">
-                <h3 className="event-title">📌 {event.title}</h3>
-                <p className="event-date">📅 {event.date} | ⏰ {event.time}</p>
-                <p className="event-location">📍 {event.location}</p>
-                <p className="event-description">{event.description}</p>
+                <div className="event-card-content">
+                  {/* Show image if available */}
+                  {event.image && (
+                    <img
+                      src={`http://localhost:5000/${event.image}`} // Make sure this is the correct URL path
+                      alt={event.title}
+                      className="event-image"
+                    />
+                  )}
+                  <div className="event-details">
+                    <h3 className="event-title">📌 {event.title}</h3>
+                    <p className="event-date">📅 {new Date(event.date).toLocaleDateString()} | ⏰ {event.time}</p>
+                    <p className="event-location">📍 {event.location}</p>
+                    <p className="event-description">{event.description}</p>
+                  </div>
+                </div>
               </div>
             ))
           ) : (

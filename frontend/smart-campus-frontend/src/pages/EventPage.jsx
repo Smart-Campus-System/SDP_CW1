@@ -44,122 +44,121 @@ const EventPage = () => {
     }
   };
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ // Handle form submission
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    // Ensure dateTime and location are selected
-    if (!dateTime || !location) {
-      setError('Please select a date, time, and location.');
-      return;
+  // Ensure dateTime and location are selected
+  if (!dateTime || !location) {
+    setError('Please select a date, time, and location.');
+    return;
+  }
+
+  // Extract date and time from dateTime input
+  const [date, time] = dateTime.split('T');  // Splits "2024-02-27T14:30" into ["2024-02-27", "14:30"]
+
+  const token = localStorage.getItem('token'); // Get the auth token
+
+  // Prepare form data for upload
+  const formData = new FormData();
+  formData.append('title', title);
+  formData.append('description', description);
+  formData.append('date', date);
+  formData.append('time', time);
+  formData.append('location', location);
+  if (image) formData.append('image', image); // Append image if available
+
+  try {
+    const response = await axios.post('http://localhost:5000/api/events/', formData, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data', // Important for file uploads
+      },
+    });
+
+    if (response.status === 200 || response.status === 201) {
+      toast.success('Event created successfully!');
+      // navigate('/dashboard'); // Redirect user
     }
+  } catch (err) {
+    setError('Failed to create the event. Please try again.');
+    toast.error(err);
+  }
+};
 
-    // Extract date and time from dateTime input
-    const [date, time] = dateTime.split('T');  // Splits "2024-02-27T14:30" into ["2024-02-27", "14:30"]
+return (
+  <div className="event-page-container">
+    <h2>Create New Event</h2>
 
-    const token = localStorage.getItem('token'); // Get the auth token
+    {error && <p className="error-message">{error}</p>}
 
-    // Create a FormData object to handle image and event data
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('date', date);
-    formData.append('time', time);
-    formData.append('location', location);
-    if (image) formData.append('image', image); // Append image if selected
+    <form onSubmit={handleSubmit} className="event-form">
+      <div className="form-group">
+        <label htmlFor="title">Event Title</label>
+        <input
+          type="text"
+          id="title"
+          placeholder="Enter event title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+      </div>
 
-    try {
-      const response = await axios.post('http://localhost:5000/api/events/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Set content type for file upload
-          'Authorization': `Bearer ${token}`, // Ensure the user is authenticated
-        },
-      });
+      <div className="form-group">
+        <label htmlFor="description">Event Description</label>
+        <textarea
+          id="description"
+          placeholder="Enter event description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
+      </div>
 
-      if (response.status === 200 || response.status === 201) {
-        toast.success('Event created successfully!');
-        navigate('/dashboard'); // Redirect user
-      }
-    } catch (err) {
-      toast.error('Failed to create the event. Please try again.');
-    }
-  };
+      <div className="form-group">
+        <label htmlFor="dateTime">Event Date & Time</label>
+        <input
+          type="datetime-local"
+          id="dateTime"
+          value={dateTime}
+          onChange={(e) => setDateTime(e.target.value)}
+          required
+        />
+      </div>
 
-  return (
-    <div className="event-page-container">
-      <h2>Create New Event</h2>
+      <div className="form-group">
+        <label htmlFor="location">Event Location</label>
+        <select
+          id="location"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          required
+          className="event-location-dropdown"
+        >
+          <option value="">Select Event Location</option>
+          {locations.map((location, index) => (
+            <option key={index} value={location}>
+              {location}
+            </option>
+          ))}
+        </select>
+      </div>
 
-      {error && <p className="error-message">{error}</p>}
+      <div className="form-group">
+        <label htmlFor="image">Event Image</label>
+        <input
+          type="file"
+          id="image"
+          onChange={(e) => setImage(e.target.files[0])}
+        />
+      </div>
 
-      <form onSubmit={handleSubmit} className="event-form">
-        <div className="form-group">
-          <label htmlFor="title">Event Title</label>
-          <input
-            type="text"
-            id="title"
-            placeholder="Enter event title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="description">Event Description</label>
-          <textarea
-            id="description"
-            placeholder="Enter event description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="dateTime">Event Date & Time</label>
-          <input
-            type="datetime-local"
-            id="dateTime"
-            value={dateTime}
-            onChange={(e) => setDateTime(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="location">Event Location</label>
-          <select
-            id="location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            required
-            className="event-location-dropdown"
-          >
-            <option value="">Select Event Location</option>
-            {locations.map((location, index) => (
-              <option key={index} value={location}>
-                {location}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Image Upload Input */}
-        <div className="form-group">
-          <label htmlFor="image">Event Image</label>
-          <input
-            type="file"
-            id="image"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-        </div>
-
-        <button type="submit" className="submit-btn">Create Event</button>
-      </form>
-      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick pauseOnHover />
-    </div>
-  );
+      <button type="submit" className="submit-btn">Create Event</button>
+    </form>
+    <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick pauseOnHover />
+  </div>
+);
 };
 
 export default EventPage;

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import './Sidebar.css'; // Import external CSS file
 
 const Sidebar = () => {
+  const [role, setRole] = useState('admin'); 
   const [schedulerOpen, setSchedulerOpen] = useState(false);
   const [modulesOpen, setModulesOpen] = useState(false);
 
@@ -28,14 +29,15 @@ const Sidebar = () => {
         </button>
       </Link>
 
+      {/* Render Analytics only for Admin */}
+      {userRole === "admin" && (
         <Link to="/analytics">
           <button className="sidebar-button">
             <FaChartPie className="icon" />
             Analytics
           </button>
         </Link>
-      
-
+      )}
 
       {/* Scheduler Button with hover effect */}
       <button onClick={toggleScheduler} className="sidebar-button">

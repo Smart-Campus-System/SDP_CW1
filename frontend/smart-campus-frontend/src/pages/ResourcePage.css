@@ -228,3 +228,203 @@ input {
   width: 390px;
 }
   
+/* Button Container for Equipment and Entire Hall */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Space between buttons */
+  margin-top: 20px; /* Space from the top */
+}
+
+/* Button Styles */
+.book-hall-button, .book-equipment-button {
+  padding: 12px 20px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 1.2em;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 45%; /* Makes buttons take up equal space */
+}
+
+.book-hall-button:hover, .book-equipment-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+/* Equipment Booking Modal */
+.equipment-booking-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.eq-modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.eq-modal-content h3 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  color: #45a049; /* Blue color for header */
+  font-weight: 600;
+}
+
+.eq-form-group {
+  margin-bottom: 20px;
+}
+
+.eq-form-group label {
+  font-size: 1.1em;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.eq-form-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  margin-bottom: 15px;
+}
+
+.eq-form-group input:focus {
+  outline: none;
+  border-color: #4caf50;
+}
+
+/* Submit Button */
+.eq-submit-btn2 {
+  padding: 12px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.eq-submit-btn2:hover {
+  background-color: #45a049; /* Darker green when hovered */
+}
+
+/* Cancel Button */
+.eq-cancel-btn2 {
+  padding: 12px 20px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.eq-cancel-btn2:hover {
+  background-color: #c0392b; /* Darker red when hovered */
+}
+
+/* Modal for Entire Hall Booking */
+.booking-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.modal-content h3 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.submit-btn1 {
+  padding: 12px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 390px;
+}
+
+.submit-btn1:hover {
+  background-color: #45a049;
+}
+
+.cancel-btn {
+  background-color: #e74c3c;
+  margin-top: 10px;
+  padding: 12px;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 390px;
+}
+
+.cancel-btn:hover {
+  background-color: #c0392b;
+}
