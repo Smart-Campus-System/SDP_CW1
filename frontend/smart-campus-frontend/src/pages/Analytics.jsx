@@ -4,6 +4,8 @@ import { FaUserGraduate, FaChalkboardTeacher, FaUsers, FaBook, FaChartPie } from
 import "./DashboardPage.css";
 import Layout from '../pages/Layout';
 import axios from "axios"; // For making API calls
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
+
 
 const Analytics = () => {
   const [role, setRole] = useState(null);
@@ -65,6 +67,17 @@ const Analytics = () => {
     // fetchAnalyticsData();
   }, []);
 
+   // Sample data for Hall Seat Booking
+   const hallSeatData = [
+    { name: "Main Hall", seats: 12 },
+    { name: "Auditorium", seats: 20 },
+    { name: "Lecture Hall - U1212", seats: 10 },
+    { name: "Lecture Hall - U1213", seats: 22 },
+    { name: "Computer Lab", seats: 5 },
+  ];
+
+  // const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A569BD"];
+
   
 
   return (
@@ -121,6 +134,47 @@ const Analytics = () => {
               </tbody>
             </table>
           </div>
+        {/* Chart Section */}
+<div className="chart-wrapper">
+  <h2><FaChartPie className="icon" /> Hall Seat Bookings</h2>
+
+  <div className="chart-container">
+    {/* Pie Chart */}
+    <div className="chart">
+      <ResponsiveContainer width="100%" height={300}>
+        <PieChart>
+          <Pie
+            data={hallSeatData}
+            cx="50%"
+            cy="50%"
+            outerRadius={100}
+            dataKey="seats"
+            label
+            labelLine={false}  
+          >
+            {hallSeatData.map((entry, index) => (
+              <Cell key={`cell-${entry.name}`} fill={["#004E64", "#00A5CF", "#9FFFCB", "#25A18E", "#7AE582"][index % 5]} />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend />
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+
+    {/* Bar Chart */}
+    <div className="chart">
+      <ResponsiveContainer width="100%" height={300}>
+        <BarChart data={hallSeatData}>
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="seats" fill="#004E64" />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  </div></div>
         </div>
       </div>
     </Layout>

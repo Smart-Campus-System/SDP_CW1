@@ -4,6 +4,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction"; // for date click and event drag & drop
 import "./CalendarPage.css";
+import tippy from "tippy.js";
 
 const CalendarPage = () => {
   const [events, setEvents] = useState([]);
@@ -18,6 +19,7 @@ const CalendarPage = () => {
     image: null,
   });
   const [holidays, setHolidays] = useState([]);
+  
 
   useEffect(() => {
     fetchEvents();
@@ -121,6 +123,21 @@ const CalendarPage = () => {
     return {}; // Default color for events
   };
 
+   // Function to show tooltip on event hover
+   const handleEventMouseEnter = (info) => {
+    tippy(info.el, {
+      content: `
+        <strong>${info.event.title}</strong><br/>
+        Date: ${info.event.start.toISOString().split("T")[0]}<br/>
+        Time: ${info.event.extendedProps.time}<br/>
+        Location: ${info.event.extendedProps.location}
+      `,
+      allowHTML: true,
+      placement: "top",
+      animation: "fade",
+    });
+  };
+
   return (
     <div className="calendar-container">
       <FullCalendar
@@ -129,11 +146,15 @@ const CalendarPage = () => {
         events={events}
         dateClick={handleDateClick} // Trigger modal on date click
         eventClassNames={eventColor} // Apply custom color to events
+        eventMouseEnter={handleEventMouseEnter} // Tooltip on hover
+
       />
 
       {showEventModal && (
         <div className="event-modal">
-          <h3>Add Event</h3>
+          <div className="addEvent"> 
+            <h3>Add Event</h3>
+          </div>
           <input
             type="text"
             placeholder="Event Title"

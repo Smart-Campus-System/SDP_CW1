@@ -62,7 +62,7 @@ const RegisterPage = () => {
   return (
     <div className="register-container">
       <div className="register-box">
-        <h2>Admin Panel - Register User</h2>
+        <h2>Register User</h2>
         {error && <p className="error">{error}</p>}
         <form onSubmit={handleRegister}>
           <input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} required />
