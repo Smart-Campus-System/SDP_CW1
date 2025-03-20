@@ -27,31 +27,45 @@ router.get('/:moduleId', async (req, res) => {
 });
 
 // Add an assignment to a module (Only Admin & Lecturers)
-router.post('/:moduleId/assignments', authMiddleware, async (req, res) => {
-  try {
-    if (req.user.role !== 'admin' && req.user.role !== 'lecturer') {
-      return res.status(403).json({ message: 'Unauthorized' });
-    }
+// router.post('/:moduleId/assignments', authMiddleware, async (req, res) => {
+//   try {
+//     // Check if user is admin or lecturer
+//     if (req.user.role !== 'admin' && req.user.role !== 'lecturer') {
+//       return res.status(403).json({ message: 'Unauthorized' });
+//     }
 
-    const { title, description, dueDate } = req.body;
-    const moduleId = req.params.moduleId;
+//     const { title, description, dueDate } = req.body;
+//     const moduleId = req.params.moduleId;
 
-    const assignment = new Assignment({
-      moduleId,
-      title,
-      description,
-      dueDate,
-      uploadedBy: req.user._id,
-    });
+//     // Check if the module exists
+//     const module = await Module.findById(moduleId);
+//     if (!module) {
+//       return res.status(404).json({ message: 'Module not found' });
+//     }
 
-    await assignment.save();
-    await Module.findByIdAndUpdate(moduleId, { $push: { assignments: assignment._id } });
+//     // Create the assignment
+//     const assignment = new Assignment({
+//       moduleId,
+//       title,
+//       description,
+//       dueDate,
+//       uploadedBy: req.user._id,
+//     });
 
-    res.status(201).json(assignment);
-  } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
-  }
-});
+//     // Save the assignment
+//     await assignment.save();
+
+//     // Push the assignment ID into the module
+//     await Module.findByIdAndUpdate(moduleId, { $push: { assignments: assignment._id } });
+
+//     // Return the created assignment
+//     res.status(201).json(assignment);
+//   } catch (error) {
+//     console.error('Error:', error); // Log the error
+//     res.status(500).json({ message: 'Server Error', error: error.message });
+//   }
+// });
+
 
 // Update module completion percentage (Only Admin & Lecturers)
 router.put('/:moduleId/progress', authMiddleware, async (req, res) => {

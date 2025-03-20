@@ -84,37 +84,37 @@ const ModuleDetailsPage = () => {
         setShowModal(!showModal);
     };
 
-    // ✅ Handle Assignment Upload (For Admins & Lecturers)
     const handleUploadAssignment = async () => {
         if (!assignmentFile) {
-            alert("Please select a file for the assignment.");
-            return;
+          alert("Please select a file for the assignment.");
+          return;
         }
-
+      
         try {
-            const formData = new FormData();
-            formData.append("title", newAssignment.title);
-            formData.append("description", newAssignment.description);
-            formData.append("dueDate", newAssignment.dueDate);
-            formData.append("file", assignmentFile);
-
-            const response = await axios.post(
-                `http://localhost:5000/api/assignments/${moduleId}/assignments`,
-                formData,
-                {
-                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
-                }
-            );
-
-            alert('Assignment uploaded successfully!');
-            setModule({ ...module, assignments: [...module.assignments, response.data.assignment] });
-            setNewAssignment({ title: '', description: '', dueDate: '' });
-            setAssignmentFile(null);
-            setShowModal(false);
+          const formData = new FormData();
+          formData.append("title", newAssignment.title);
+          formData.append("description", newAssignment.description);
+          formData.append("dueDate", newAssignment.dueDate);
+          formData.append("file", assignmentFile); // Add file to the FormData
+      
+          const response = await axios.post(
+            `http://localhost:5000/api/assignments/${moduleId}/assignments`,
+            formData,
+            {
+              headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
+            }
+          );
+      
+          alert('Assignment uploaded successfully!');
+          setModule({ ...module, assignments: [...module.assignments, response.data.assignment] });
+          setNewAssignment({ title: '', description: '', dueDate: '' });
+          setAssignmentFile(null);
+          setShowModal(false);
         } catch (error) {
-            alert('Failed to upload assignment.');
+          alert('Failed to upload assignment.');
         }
-    };
+      };
+      
 
     // ✅ Handle Answer Submission (For Students)
     const handleSubmitAnswer = async (assignmentId) => {
