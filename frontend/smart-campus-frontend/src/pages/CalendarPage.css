@@ -1,21 +1,22 @@
 /* Calendar Container - Modern Look */
 .calendar-container {
   width: 100%;
-  max-width: 900px; /* Adjusted to fit various screen sizes */
-  margin: 30px auto; /* Centering the calendar */
+  max-width: 900px;
+  margin: 30px auto;
   padding: 20px;
-  background: linear-gradient(145deg, #22a35c, #d3dbe0); /* Soft gradient background */
+  background: #ffffff; /* White background */
   border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); /* Stronger shadow for depth */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
   text-align: center;
   font-family: 'Poppins', sans-serif;
-  /* transition: all 0.3s ease-in-out; */
+  border: 5px solid;
+  border-image-source: linear-gradient(145deg, #1B4332, #2D6A4F, #5bd9a0);
+  border-image-slice: 1;
 }
 
 /* Hover effect on calendar container */
 .calendar-container:hover {
-  /* transform: scale(1.02);  */
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15); /* Slight increase in shadow */
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
 }
 
 /* Calendar Header */
@@ -24,22 +25,23 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  background: #fff;
-  border-radius: 10px; /* Rounded corners for header */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  color: #2D6A4F;
 }
 
 .calendar-header h2 {
   font-size: 1.8rem;
-  color: #333; /* Dark gray color */
+  color: #2D6A4F;
   font-weight: 600;
-  letter-spacing: 1px; /* Space between letters for a modern touch */
+  letter-spacing: 1px;
 }
 
 /* Navigation buttons (Prev/Next) */
 .calendar-header button {
   padding: 10px;
-  background: #4CAF50; /* Fresh green */
+  background: #2D6A4F;
   color: white;
   border: none;
   border-radius: 50%;
@@ -50,7 +52,7 @@
 
 /* Hover effect on navigation buttons */
 .calendar-header button:hover {
-  background: #45a049; /* Slightly darker green */
+  background: #1B4332;
 }
 
 /* Calendar Weekdays */
@@ -60,13 +62,12 @@
   margin: 15px 0;
   font-size: 1.1rem;
   font-weight: 500;
-  color: #777;
+  color: #40916C;
 }
 
 .calendar-weekdays div {
   width: 14.28%;
   text-align: center;
-  color: #4CAF50;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -85,35 +86,39 @@
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
-  color: #333;
+  color: #2D6A4F;
   cursor: pointer;
   border-radius: 5px;
   transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .day:hover {
-  background-color: #e8f0f2; /* Light background when hovering */
-  transform: scale(1.05); /* Slight zoom effect */
+  background-color: #E8F0F2;
+  transform: scale(1.05);
 }
 
 /* Highlight active day */
 .day.active {
-  background-color: #4CAF50; /* Green color for active day */
+  background-color: #2D6A4F;
   color: white;
   font-weight: bold;
 }
 
 /* Event Day - Mark days with events */
 .event-day {
-  background-color: #ffeb3b; /* Yellow for event days */
-  color: #333;
+  background-color: #40916C;
+  color: white;
   font-weight: bold;
+}
+
+.addEvent {
+  color: #40916C;
 }
 
 .event-dot {
   width: 10px;
   height: 10px;
-  background-color: #ff9800; /* Orange dot for events */
+  background-color: #1B4332;
   border-radius: 50%;
   position: absolute;
   bottom: 10px;
@@ -124,7 +129,7 @@
 /* Today Button */
 .today-btn {
   padding: 10px 20px;
-  background-color: #4CAF50;
+  background-color: #2D6A4F;
   color: white;
   font-size: 1rem;
   border: none;
@@ -135,7 +140,7 @@
 }
 
 .today-btn:hover {
-  background-color: #45a049;
+  background-color: #1B4332;
   transform: scale(1.05);
 }
 
@@ -146,13 +151,16 @@
   left: 50%;
   transform: translate(-50%, -50%) scale(1);
   background: rgba(255, 255, 255, 0.95);
-  padding: 25px;
+  padding: 34px;
   box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
   z-index: 1000;
   width: 420px;
   border-radius: 15px;
   backdrop-filter: blur(10px);
   animation: fadeIn 0.3s ease-out;
+}
+.event-modal h3 {
+  color: #2D6A4F; /* Change to your preferred green color */
 }
 
 @keyframes fadeIn {
@@ -171,7 +179,8 @@
 .event-modal textarea {
   width: 100%;
   padding: 12px;
-  margin: 10px 0;
+  margin: 8px 0;
+  margin-left: -10px;
   border-radius: 8px;
   border: 1px solid #ddd;
   font-size: 16px;
@@ -181,9 +190,9 @@
 
 .event-modal input:focus,
 .event-modal textarea:focus {
-  border-color: #4CAF50;
+  border-color: #2D6A4F;
   outline: none;
-  box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 0 8px rgba(45, 106, 79, 0.3);
 }
 
 /* Save and Cancel buttons inside modal */
@@ -199,12 +208,12 @@
 }
 
 .event-modal button:first-of-type {
-  background: #4CAF50;
+  background: #2D6A4F;
   color: white;
 }
 
 .event-modal button:first-of-type:hover {
-  background: #45a049;
+  background: #1B4332;
 }
 
 .event-modal .cancel-btn {
@@ -216,3 +225,47 @@
 .event-modal .cancel-btn:hover {
   background: #d32f2f;
 }
+
+/* Tippy.js Tooltip Styling */
+.tippy-box {
+  background: #2D6A4F; /* Requested green color */
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Arrow colors */
+.tippy-box[data-placement^="top"] .tippy-arrow {
+  border-top-color: #40916C;
+}
+
+.tippy-box[data-placement^="bottom"] .tippy-arrow {
+  border-bottom-color: #40916C;
+}
+
+.tippy-box[data-placement^="left"] .tippy-arrow {
+  border-left-color: #40916C;
+}
+
+.tippy-box[data-placement^="right"] .tippy-arrow {
+  border-right-color: #40916C;
+}
+
+/* Tooltip text formatting */
+.tippy-content {
+  text-align: left;
+}
+
+.tippy-content strong {
+  font-size: 16px;
+  color: #ffcc00; /* Highlight the event title */
+}
+
+.tippy-content br {
+  line-height: 1.6;
+}
+
