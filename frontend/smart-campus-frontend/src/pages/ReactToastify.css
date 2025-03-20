@@ -1,0 +1,14 @@
+.toastify {
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 16px;
+  }
+  
+  .toastify .toast-success {
+    background-color: #4caf50;
+  }
+  
+  .toastify .toast-error {
+    background-color: #e74c3c;
+  }
+  

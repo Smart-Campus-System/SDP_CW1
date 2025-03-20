@@ -84,50 +84,49 @@ router.get("/availability/:hallName", authMiddleware, async (req, res) => {
 });
 
 
-// ✅ Book a Seat (Students) by Hall Name
+// Updated backend endpoint to handle date, start and end time for seat booking
 router.post("/book", authMiddleware, async (req, res) => {
   try {
-    const { hallName, seatNumber } = req.body;  // Get hallName and seatNumber from the request body
-    const userId = req.user._id;  // Get the logged-in user's ID
+    const { hallName, seatNumber, bookingDate, startTime, endTime } = req.body;
+    const userId = req.user._id; // Get the logged-in user's ID
 
-    // Fetch the resource (contains halls and seats)
     const resource = await Resource.findOne();
     if (!resource) {
-      return res.status(404).json({ message: "Resource not found" });  // Resource not found
+      return res.status(404).json({ message: "Resource not found" });
     }
 
-    // Find the specific hall by hallName
-    const hall = resource.halls.find(hall => hall.hallName === hallName);  // Find the hall by its name
+    // Find the hall and the seat by seat number
+    const hall = resource.halls.find(hall => hall.hallName === hallName);
     if (!hall) {
-      return res.status(404).json({ message: "Hall not found" });  // Hall not found
+      return res.status(404).json({ message: "Hall not found" });
     }
 
-    // Find the seat in the selected hall by seatNumber
-    const seat = hall.seats.find(seat => seat.seatNumber === seatNumber);  // Find seat by seatNumber
+    const seat = hall.seats.find(seat => seat.seatNumber === seatNumber);
     if (!seat) {
-      return res.status(404).json({ message: "Seat not found" });  // Seat not found
+      return res.status(404).json({ message: "Seat not found" });
     }
 
     // Check if the seat is already booked
     if (seat.isBooked) {
-      return res.status(400).json({ message: "Seat already booked" });  // Seat already booked
+      return res.status(400).json({ message: "Seat already booked" });
     }
 
-    // ✅ Book the seat
+    // Book the seat with the provided date and time range
     seat.isBooked = true;
-    seat.bookedBy = userId;   // Booked by the logged-in user
-    seat.bookedAt = new Date();  // Set the booking time
-    await resource.save();  // Save the updated resource with the booked seat
+    seat.bookedBy = userId;
+    seat.bookedAt = new Date();
+    seat.bookingDate = bookingDate; // Store the selected booking date
+    seat.startTime = startTime;     // Store the start time
+    seat.endTime = endTime;         // Store the end time
 
-    // ✅ Send notification to student
-    NotificationService.sendNotification(userId, `Your seat ${seatNumber} in ${hall.hallName} is booked.`);
-
-    res.status(200).json({ message: `Seat ${seatNumber} in ${hall.hallName} booked successfully!` });
+    await resource.save();
+    res.status(200).json({ message: "Seat booked successfully!" });
   } catch (error) {
-    console.error("Booking Error:", error);
-    res.status(500).json({ message: "Server Error", error });
+    console.error("Error booking seat:", error);
+    res.status(500).json({ message: "Server error", error });
   }
 });
+
 
 
 // ✅ Cancel Seat Reservation (Students)

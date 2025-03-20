@@ -68,7 +68,21 @@
   max-width: 400px;
 }
 
-button {
+/* button{
+  width: 120%;
+  padding: 10px;
+  font-size: 1em;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  margin-left: 65px;
+} */
+
+.save-btn {
+  background-color: #52B788;
+  color: white;
   width: 120%;
   padding: 10px;
   font-size: 1em;
@@ -80,11 +94,6 @@ button {
   margin-left: 65px;
 }
 
-.save-btn {
-  background-color: #52B788;
-  color: white;
-}
-
 .save-btn:hover {
   background-color: #40916C;
 }
@@ -92,6 +101,15 @@ button {
 .delete-btn {
   background-color: #D9534F;
   color: white;
+  width: 120%;
+  padding: 10px;
+  font-size: 1em;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  margin-left: 65px;
 }
 
 .delete-btn:hover {
@@ -101,6 +119,15 @@ button {
 .sign-out-btn {
   background-color: #2D6A4F;
   color: white;
+  width: 120%;
+  padding: 10px;
+  font-size: 1em;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  margin-left: 65px;
 }
 
 .sign-out-btn:hover {
@@ -110,6 +137,15 @@ button {
 .change-password-btn {
   background-color: transparent;
   color: #1B4332;
+  width: 120%;
+  padding: 10px;
+  font-size: 1em;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  margin-left: 65px;
 }
 
 .change-password-btn:hover {
