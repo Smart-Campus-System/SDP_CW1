@@ -60,17 +60,39 @@
 }
 
 /* Dropdown Option Styling */
-.dropdown-option {
+button.dropdown-option {
   background-color: transparent;
   border: none;
-    /* padding: 10px 20px; */
+  padding: 10px 20px;
   width: 100%;
   text-align: left;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
   border-radius: 6px;
+  color: #333; /* Default text color */
 }
+
+/* Hover effect */
+button.dropdown-option:hover {
+  background-color: #f0f0f0; 
+  color: #4caf50; 
+}
+
+/* Focus effect (for accessibility) */
+button.dropdown-option:focus {
+  outline: none; 
+  box-shadow: 0 0 0 2px rgba(5, 168, 54, 0.5); 
+}
+
+/* Active (click) effect */
+button.dropdown-option:active {
+  background-color: #e2e2e2; 
+  color: #4caf50; 
+}
+
+
+
 
 /* Hover Effect on Dropdown Options */
 

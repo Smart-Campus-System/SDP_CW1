@@ -26,6 +26,24 @@ router.get('/dashboard/stats', authMiddleware, async (req, res) => {
   }
 });
 
+// Get all users (Admins can access this)
+router.get("/all", authMiddleware, async (req, res) => {
+  try {
+    // Fetch all users from the database
+    const users = await User.find().select("-password"); // Exclude password field from response
+
+    if (!users || users.length === 0) {
+      return res.status(404).json({ msg: "No users found" });
+    }
+
+    // Return the list of users
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ msg: "Server error", error });
+  }
+});
+
+
 
 // 🔹 Fetch User Details (Protected Route)
 router.get("/:id", authMiddleware, async (req, res) => {
