@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ResourcePage.css"; // Import custom CSS for styling
+import { ToastContainer, toast } from 'react-toastify';
+import './ReactToastify.css';
+
 
 const ResourcePage = () => {
   const token = localStorage.getItem("token");
@@ -8,6 +11,16 @@ const ResourcePage = () => {
   const [selectedHall, setSelectedHall] = useState(null);
   const [loading, setLoading] = useState(false);
   const [halls, setHalls] = useState([]); // State to store hall names
+
+  // For modal state
+  const [showModal, setShowModal] = useState(false);
+  const [selectedSeat, setSelectedSeat] = useState(null);
+  const [bookingDate, setBookingDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [showBookingModal, setShowBookingModal] = useState(false); 
+  
+
 
   // Fetch hall names from the backend
   const fetchHalls = async () => {
@@ -67,25 +80,37 @@ const ResourcePage = () => {
 
 
 
-  // Book a seat
-  const bookSeat = async (hallName, seatNumber) => {
+  // Book a seat with additional data (date & time)
+  const bookSeat = async (hallName, seatNumber, bookingDate, startTime, endTime) => {
     try {
-      console.log("Booking seat:", { hallName, seatNumber }); // Debugging log
       await axios.post(
         "http://localhost:5000/api/resources/book",
-        { hallName, seatNumber },
+        { hallName, seatNumber, bookingDate, startTime, endTime },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      alert("Seat booked successfully!");
-      fetchAvailability(hallName); // Refresh availability and seat status by passing hallName
+      toast.success("Seat booked successfully!"); // Show success toast
+      fetchAvailability(hallName); // Refresh availability after booking
+      setShowModal(false); // Close the modal after booking
     } catch (error) {
-      console.error("Error booking seat:", error); // Debugging log
-      alert("Failed to book seat.");
+      toast.error("Failed to book seat."); // Show error toast
     }
   };
 
+
+  // Handle hall selection
+  const handleHallSelect = (hallName) => {
+    setSelectedHall(hallName);
+    fetchAvailability(hallName); // Fetch available seats for selected hall
+  };
+
+
+  // Handle seat click, open modal
+  const handleSeatClick = (seat) => {
+    setSelectedSeat(seat);
+    setShowModal(true); // Show the modal when seat is clicked
+  };
 
 
   // Cancel seat reservation
@@ -99,39 +124,53 @@ const ResourcePage = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      alert("Booking canceled successfully!");
+      toast.success("Booking canceled successfully!");
       fetchAvailability(hallName); // Refresh availability and seat status
     } catch (error) {
-      console.error("Error canceling seat:", error); // Debugging log
-      alert("Failed to cancel booking.");
+      toast.error("Error canceling seat:", error); // Debugging log
     }
   };
 
 
-  // Book entire hall (admin/lecturer only)
-  const bookEntireHall = async (hallName) => {
+  // Book entire hall with additional data (date, start time, and end time)
+  const bookEntireHall = async () => {
     try {
-      console.log("Booking entire hall:", { hallName }); // Debugging log
       await axios.post(
         "http://localhost:5000/api/resources/bookHall",
-        { hallName },
+        { hallName: selectedHall, bookingDate, startTime, endTime },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      alert("Hall booked successfully!");
-      fetchAvailability(hallName); // Refresh availability
+      alert("Entire hall booked successfully!");
+      setShowBookingModal(false); // Close the modal after booking
+      fetchAvailability(selectedHall); // Refresh availability after booking
     } catch (error) {
-      console.error("Error booking hall:", error); // Debugging log
-      alert("Failed to book the hall.");
+      console.error("Error booking entire hall:", error);
+      alert("Failed to book the entire hall.");
     }
   };
 
-  // Handle hall selection
-  const handleHallSelect = (hallName) => {
-    setSelectedHall(hallName);
-    fetchAvailability(hallName); // Fetch available seats for selected hall
+  // Handle the modal input change for booking details (date, start time, end time)
+  const handleBookingDetailsChange = (e) => {
+    const { name, value } = e.target;
+    setBookingDetails({
+      ...bookingDetails,
+      [name]: value,
+    });
   };
+
+  // Handle book entire hall button click
+  const handleBookEntireHall = (hallName) => {
+    setShowBookingModal(true); // Show the booking modal when the button is clicked
+    setSelectedHall(hallName); // Store the selected hall
+  };
+
+  // Handle hall selection
+  // const handleHallSelect = (hallName) => {
+  //   setSelectedHall(hallName);
+  //   fetchAvailability(hallName); // Fetch available seats for selected hall
+  // };
 
   return (
     <div className="resource-page">
@@ -166,14 +205,14 @@ const ResourcePage = () => {
                     key={seat.seatNumber}
                     className={`seat ${seat.isBooked ? "booked" : "available"}`}
                     style={{
-                      backgroundColor: seat.isBooked ? '#b1f0b7' : '#4caf50', // Red for booked, green for available
+                      backgroundColor: seat.isBooked ? '#b1f0b7' : '#4caf50', // Green for available, light green for booked
                     }}
                   >
                     <span>Seat {seat.seatNumber}</span>
                     {!seat.isBooked ? (
                       <button
                         className="seat-action-button"
-                        onClick={() => bookSeat(selectedHall, seat.seatNumber)}
+                        onClick={() => handleSeatClick(seat)} // Open modal to book seat
                       >
                         Book Seat
                       </button>
@@ -182,7 +221,7 @@ const ResourcePage = () => {
                         className="seat-action-button"
                         onClick={() => cancelSeat(selectedHall, seat.seatNumber)}
                       >
-                        Cancel Reservation
+                        Cancel Booking
                       </button>
                     )}
                   </div>
@@ -195,20 +234,121 @@ const ResourcePage = () => {
         </div>
       )}
 
+      {showModal && (
+        <div className="seat-booking-modal">
+          <h3>Book Seat {selectedSeat.seatNumber}</h3>
+          <div className="modal-form">
+            <label htmlFor="date">Select Date</label>
+            <input
+              type="date"
+              id="date"
+              value={bookingDate}
+              onChange={(e) => setBookingDate(e.target.value)}
+              required
+            />
+
+            <label htmlFor="startTime">Select Start Time</label>
+            <input
+              type="time"
+              id="startTime"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              required
+            />
+
+            <label htmlFor="endTime">Select End Time</label>
+            <input
+              type="time"
+              id="endTime"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              required
+            />
+
+            <button
+              className="seat-action-button"
+              onClick={() => bookSeat(selectedHall, selectedSeat.seatNumber, bookingDate, startTime, endTime)}
+            >
+              Confirm Booking
+            </button>
+            <button
+              className="cancel-action-button"
+              onClick={() => setShowModal(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
 
 
-      {/* Option for lecturers/admins to book the entire hall */}
+
+
+
+      {/* Book Entire Hall Button (Lecturers/Admin only) */}
       {["lecturer", "admin"].includes(localStorage.getItem("role")) && (
         <div className="book-entire-hall">
           <button
             className="book-hall-button"
-            onClick={() => bookEntireHall(selectedHall)}
+            onClick={() => handleBookEntireHall(selectedHall)}
           >
             Book Entire Hall
           </button>
         </div>
       )}
+
+      {/* Modal for Entire Hall Booking */}
+      {showBookingModal && (
+        <div className="booking-modal">
+          <div className="modal-content">
+            <h3>Book Entire Hall: {selectedHall}</h3>
+            <div className="form-group">
+              <label htmlFor="bookingDate">Date</label>
+              <input
+                type="date"
+                id="bookingDate"
+                value={bookingDate}
+                onChange={(e) => setBookingDate(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="startTime">Start Time</label>
+              <input
+                type="time"
+                id="startTime"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="endTime">End Time</label>
+              <input
+                type="time"
+                id="endTime"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                required
+              />
+            </div>
+            <button className="submit-btn1" onClick={bookEntireHall}>
+              Confirm Booking
+            </button>
+            <div> <button
+              className="cancel-btn"
+              onClick={() => setShowBookingModal(false)}
+            >
+              Cancel
+            </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast notifications container */}
+      <ToastContainer position="bottom-left" autoClose={5000} hideProgressBar={false} closeOnClick pauseOnHover />
     </div>
   );
 };
