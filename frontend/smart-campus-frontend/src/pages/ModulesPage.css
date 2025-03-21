@@ -84,7 +84,7 @@
 .module-title {
   font-size: 1.4rem;
   font-weight: 600;
-  color: #007bff;
+  color: #40916C;
   text-decoration: none;
   display: block;
   margin-bottom: 12px;
@@ -94,7 +94,7 @@
 /* 🔥 Hover Effect for Title */
 .module-title:hover {
   text-decoration: underline;
-  color: #0056b3;
+  color: #237864;
 }
 
 /* 📌 Pie Chart Container */
@@ -116,7 +116,7 @@
 
 /* 🔥 Hover Effect on Completion Text */
 .module-card:hover .completion-text {
-  color: #007bff;
+  color: #2b664f;
 }
 
 /* 🌟 Floating Glow Effect */
@@ -151,4 +151,3 @@
     font-size: 1.2rem;
   }
 }
-
