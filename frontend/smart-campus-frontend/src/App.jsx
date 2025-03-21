@@ -12,6 +12,7 @@ import ModuleDetailsPage from './pages/ModuleDetailsPage';
 import ProfilePage from './pages/ProfilePage';
 import ResourcePage from './pages/ResourcePage';
 import Analytics from './pages/Analytics';
+import Message from './pages/Message';
 
 const App = () => {
   return (
@@ -40,7 +41,8 @@ const App = () => {
         <Route path="/modules" element={<Layout><ModulesPage /></Layout>} />
         <Route path="/modules/:moduleId" element={<Layout><ModuleDetailsPage /></Layout>} />
         <Route path="/resource" element={<Layout><ResourcePage /></Layout>} />
-        <Route path="/profile" element={<ProfilePage />} />       
+        <Route path="/profile" element={<ProfilePage />} />  
+        <Route path='/message' element={<Layout><Message/></Layout>} />    
       </Routes>
     </Router>
   );
